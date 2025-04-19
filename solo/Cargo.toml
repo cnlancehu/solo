@@ -1,10 +1,11 @@
 [package]
 name = "solo"
-description = "An app for cloud safety."
+description = "An port management app for cloud safety."
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
 authors = ["Lance <me@lance.fun>"]
+repository = "https://github.com/cnlancehu/solo"
 
 [dependencies]
 solo-lib = { path = "../solo-lib" }
@@ -17,10 +18,17 @@ unicode-width = "0.2.0"
 anyhow = "1.0.97"
 lazy_static = "1.5.0"
 walkdir = "2.5.0"
-reqwest = { version = "0.12.15", features = ["rustls-tls-native-roots", "json"] }
+reqwest = { version = "0.12.15", features = [
+    "rustls-tls-native-roots",
+    "json",
+] }
 json-spanned-value = "0.2.2"
 chrono = "0.4.40"
 hashbrown = "0.15.2"
 futures = "0.3.31"
 cnxt = { version = "0.1.6", features = ["conditional-coloring"] }
-lettre = { version = "0.11.15", features = ["rustls-native-certs"] }
+lettre = { version = "0.11.15", features = [
+    "rustls",
+    "rustls-native-certs",
+    "ring",
+] }
