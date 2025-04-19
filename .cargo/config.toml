@@ -1,0 +1,2 @@
+[target.'cfg(windows)']
+rustflags = ["-Clink-arg=/DEBUG:NONE"] # Disable debug info for Windows

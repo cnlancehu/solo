@@ -1,0 +1,26 @@
+[package]
+name = "solo"
+description = "An app for cloud safety."
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+authors = ["Lance <me@lance.fun>"]
+
+[dependencies]
+solo-lib = { path = "../solo-lib" }
+tokio = { version = "1.44.2", features = ["full"] }
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+sys-locale = "0.3.2"
+rust-i18n = "3.1.4"
+unicode-width = "0.2.0"
+anyhow = "1.0.97"
+lazy_static = "1.5.0"
+walkdir = "2.5.0"
+reqwest = { version = "0.12.15", features = ["rustls-tls-native-roots", "json"] }
+json-spanned-value = "0.2.2"
+chrono = "0.4.40"
+hashbrown = "0.15.2"
+futures = "0.3.31"
+cnxt = { version = "0.1.6", features = ["conditional-coloring"] }
+lettre = { version = "0.11.15", features = ["rustls-native-certs"] }
