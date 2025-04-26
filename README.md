@@ -1,24 +1,29 @@
 # Solo
-**English** | [简体中文](README-zh.md)
 
-Solo is a lightweight security tool that focuses on protecting the core ports of the server. It can automatically detect your current public IP, dynamically adjust firewall rules through the cloud platform API, and lock the access rights of the specified port (such as SSH/22) to the administrator's real-time IP.
+一款保护服务器端口的安全工具
 
-After two years of development, Solo's predecessor [qcip](https://github.com/cnlancehu/qcip) project has become more complete.
+Solo 自动检测当前的公网 IP，通过云服务商的 API 动态调整防火墙规则，并将指定端口（例如 SSH/22）的来源 IP 锁定到当前 IP。
 
-However, considering the limitations of Golang in performance optimization and the problem that the SDKs of various cloud service providers are too large, we decided to rewrite the entire project in Rust and named it Solo.
+经过两年的开发，Solo 的前身 [qcip](https://github.com/cnlancehu/qcip) 项目已趋于完善。
 
+然而，考虑到 Golang 在性能优化方面的局限性，以及各云服务提供商 SDK 库过于庞大的问题，我们决定用 Rust 重写整个项目，并将其命名为 **Solo**。
 
-## Warning
-**Solo is still in the early stages of development.**
+## 注意
+**Solo 仍处于早期开发阶段。**
 
-There might be bugs or incomplete features. Please use it with caution.
+可能存在 bug 或功能不完善，请谨慎使用。
 
-## Supported Cloud Service Providers
-| Service Provider |     Product     |
-| :--------------: | :-------------: |
-|  Tencent Cloud   | CVM, Lighthouse |
-|  Alibaba Cloud   |    ECS, Swas    |
+## 支持的云服务提供商
+| 服务商 |         云产品          |
+| :----: | :---------------------: |
+| 腾讯云 | 云服务器 轻量应用服务器 |
+| 阿里云 | 云服务器 轻量应用服务器 |
 
-We are currently adapting to other cloud service providers, if you have a server of non-supported service provider and want to help us adapt it, please contact us.
+我们会尽力适配其他服务商。
 
-## Guide
+如果你有其他云服务商的服务器，并希望帮助我们适配，请通过 issue 与我们联系。
+
+## 指南
+
+### 下载
+请前往 [Release](https://github.com/cnlancehu/solo/releases) 下载
