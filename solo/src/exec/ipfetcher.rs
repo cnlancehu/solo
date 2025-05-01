@@ -25,12 +25,6 @@ pub enum IpProvider {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct IpProviderInput {
-    pub embed: Option<String>,
-    pub url: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum EmbedIpProvider {
     #[serde(rename = "ipecho")]
@@ -42,14 +36,6 @@ pub enum EmbedIpProvider {
 }
 
 impl EmbedIpProvider {
-    pub fn from_str(s: &str) -> Option<Self> {
-        match s {
-            "ipecho" => Some(Self::IpEcho),
-            "curlmyip" => Some(Self::CurlMyIp),
-            "myexternalip" => Some(Self::MyExternalIp),
-            _ => None,
-        }
-    }
     pub fn url(&self) -> String {
         match self {
             Self::IpEcho => "https://ipecho.net/ip".to_string(),

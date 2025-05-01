@@ -11,7 +11,6 @@ repository = "https://github.com/cnlancehu/solo"
 solo-lib = { path = "../solo-lib" }
 tokio = { version = "1.44.2", features = ["full"] }
 serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.140"
 sys-locale = "0.3.2"
 rust-i18n = "3.1.4"
 unicode-width = "0.2.0"
@@ -22,7 +21,7 @@ reqwest = { version = "0.12.15", default-features = false, features = [
     "rustls-tls-native-roots",
     "json",
 ] }
-json-spanned-value = "0.2.2"
+serde_json = "1.0.140"
 chrono = "0.4.40"
 hashbrown = "0.15.2"
 futures = "0.3.31"
@@ -33,5 +32,6 @@ lettre = { version = "0.11.15", default-features = false, features = [
     "ring",
 
     "smtp-transport",
-    "builder"
+    "builder",
 ] }
+toml = "0.8.22"
