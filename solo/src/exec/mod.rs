@@ -144,6 +144,7 @@ pub async fn run(config_args: Vec<String>) {
                         let handle = execute_task(report.id, tx.clone(), config[report.id].clone(), *interval);
                         futures.push(handle);
 
+                        // TODO: Blockage occurs here
                         let notification_result = send_notification(
                             id_config_notifications.get(&report.id).unwrap(),
                             &report,

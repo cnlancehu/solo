@@ -13,7 +13,7 @@ Solo 自动检测当前的公网 IP，通过云服务商的 API 动态调整防�
 
 可能存在 bug 或功能不完善，请谨慎使用。
 
-## 支持的云服务提供商
+## 支持的云服务商
 | 服务商 |         云产品          |
 | :----: | :---------------------: |
 | 腾讯云 | 云服务器 轻量应用服务器 |
@@ -27,3 +27,9 @@ Solo 自动检测当前的公网 IP，通过云服务商的 API 动态调整防�
 
 ### 下载
 请前往 [Release](https://github.com/cnlancehu/solo/releases) 下载
+
+### 文档
+见 [Solo Doc](https://solo.lance.fun/)
+
+> [!IMPORTANT]
+> 文档尚未完善，你可在 [文档仓库](https://github.com/cnlancehu/solo-doc) 提交代码参与贡献。

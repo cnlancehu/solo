@@ -107,9 +107,8 @@ pub enum QmsgConfigMsgType {
 
 #[cfg(test)]
 mod tests {
-    use crate::exec::ipfetcher::EmbedIpProvider;
-
     use super::*;
+    use crate::exec::ipfetcher::EmbedIpProvider;
 
     #[test]
     fn generate_example() {
