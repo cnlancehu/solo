@@ -15,6 +15,8 @@ lazy_static! {
         }
         #[cfg(not(debug_assertions))]
         {
+            use crate::EXE_DIR;
+
             EXE_DIR.join("path")
         }
     };
