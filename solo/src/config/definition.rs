@@ -104,3 +104,24 @@ pub enum QmsgConfigMsgType {
     Group,
     Private,
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::exec::ipfetcher::EmbedIpProvider;
+
+    use super::*;
+
+    #[test]
+    fn generate_example() {
+        let config = Config {
+            name: "example".to_string(),
+            servers: vec![],
+            schedule: Schedule::Loop(60),
+            ip_provider: IpProvider::Embed(EmbedIpProvider::CurlMyIp),
+            notifications: vec![],
+        };
+
+        let config = toml::to_string(&config).unwrap();
+        println!("{}", config);
+    }
+}

@@ -6,18 +6,27 @@
     clippy::perf,
     clippy::correctness
 )]
-use std::{fs, process};
+use std::{env::current_exe, fs, path::PathBuf, process};
 
 use CliAction::{ManageConfig, RunConfig, ShowHelp, ShowVersion};
 use cli::{CliAction, ManageConfigAction, parse, show_conf_help, show_help};
 use cnxt::Colorize as _;
 use config::{CONFIG_DETECTION_PATH, reader::show_avaliable_configs};
+use lazy_static::lazy_static;
 use rust_i18n::set_locale;
 use sys_locale::get_locale;
-
 mod cli;
 mod config;
 mod exec;
+
+lazy_static! {
+    pub static ref EXE_DIR: PathBuf = {
+        current_exe()
+            .ok()
+            .and_then(|path| path.parent().map(std::path::Path::to_path_buf))
+            .unwrap()
+    };
+}
 
 rust_i18n::i18n!("locales", fallback = ["en-US"]);
 

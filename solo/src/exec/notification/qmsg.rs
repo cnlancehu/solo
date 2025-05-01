@@ -33,8 +33,7 @@ pub async fn send<'a>(
     report: &ExecutionReport<'a>,
     status: Status,
 ) -> Option<NotificationError<'a>> {
-
-    send_child(notification, &report, &status)
+    send_child(notification, report, &status)
         .map_err(|e| NotificationError {
             name: Cow::Borrowed(&notification.name),
             error: e,
@@ -59,7 +58,7 @@ async fn send_child<'a>(
     else {
         unreachable!()
     };
-    let report = show_full_report(&report, false, show_ipaddr.unwrap_or(false));
+    let report = show_full_report(report, false, show_ipaddr.unwrap_or(false));
 
     let endpoint = endpoint.as_ref().map_or("https://qmsg.zendee.cn", |v| v);
     let url = match msg_type {

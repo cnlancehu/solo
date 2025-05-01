@@ -15,12 +15,7 @@ lazy_static! {
         }
         #[cfg(not(debug_assertions))]
         {
-            use std::env;
-
-            let mut path = env::current_exe().unwrap();
-            path.pop();
-            path.push("conf");
-            path
+            EXE_DIR.join("path")
         }
     };
     pub static ref CONFIG_LIST: Vec<ConfigFile> = get_config_list();

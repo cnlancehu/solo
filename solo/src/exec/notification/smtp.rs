@@ -19,7 +19,7 @@ pub fn send<'a>(
     report: &ExecutionReport<'a>,
     status: Status,
 ) -> Option<NotificationError<'a>> {
-    let report = show_full_report(&report, false, true);
+    let report = show_full_report(report, false, true);
 
     send_child(notification, &report, &status)
         .map_err(|e| NotificationError {

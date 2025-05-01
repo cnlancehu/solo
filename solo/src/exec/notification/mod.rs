@@ -11,6 +11,9 @@ pub mod error;
 pub mod qmsg;
 pub mod smtp;
 
+#[cfg(target_os = "windows")]
+pub mod system;
+
 #[derive(PartialEq, Eq, Clone)]
 pub enum Status {
     SuccessButNotChanged,
@@ -49,18 +52,12 @@ pub async fn send_notification<'a>(
         }
     };
 
-    // 使用迭代器和过滤器直接收集结果，减少中间集合
     futures::future::join_all(
         notifications
             .iter()
             .filter(|n| should_notify(n, &status))
             .map(|n| async {
-                send_single_notification(
-                    n,
-                    report,
-                    status.clone(),
-                )
-                .await
+                send_single_notification(n, report, status.clone()).await
             }),
     )
     .await
@@ -69,7 +66,6 @@ pub async fn send_notification<'a>(
     .collect()
 }
 
-// 提取过滤逻辑为单独函数，提高可读性
 fn should_notify(notification: &Notification, status: &Status) -> bool {
     match notification.trigger {
         NotificationTrigger::OnSuccess => {
@@ -85,6 +81,7 @@ fn should_notify(notification: &Notification, status: &Status) -> bool {
         }
     }
 }
+
 async fn send_single_notification<'a>(
     notification: &'a Notification,
     report: &'a ExecutionReport<'a>,
@@ -97,6 +94,15 @@ async fn send_single_notification<'a>(
         NotificationMethod::Qmsg { .. } => {
             qmsg::send(notification, report, status).await
         }
-        NotificationMethod::System => todo!(),
+        NotificationMethod::System => {
+            #[cfg(target_os = "windows")]
+            {
+                system::send(notification, report, status).await
+            }
+            #[cfg(not(target_os = "windows"))]
+            {
+                None
+            }
+        }
     }
 }

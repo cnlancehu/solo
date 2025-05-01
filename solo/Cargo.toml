@@ -35,3 +35,7 @@ lettre = { version = "0.11.15", default-features = false, features = [
     "builder",
 ] }
 toml = "0.8.22"
+
+[target.'cfg(windows)'.dependencies]
+tauri-winrt-notification = "0.7.2"
+opener = "0.7.2"
