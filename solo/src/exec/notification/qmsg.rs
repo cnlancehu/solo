@@ -7,8 +7,9 @@ use serde::{Deserialize, Serialize};
 use solo_lib::client;
 
 use super::{Status, error::NotificationError};
-use crate::config::definition::{
-    Notification, NotificationMethod, QmsgConfigMsgType,
+use crate::{
+    config::definition::{Notification, NotificationMethod, QmsgConfigMsgType},
+    exec::report::{ExecutionReport, show_full_report},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -27,11 +28,12 @@ struct QmsgResponse {
     code: i32,
 }
 
-pub async fn send(
-    notification: &Notification,
-    report: Vec<String>,
+pub async fn send<'a>(
+    notification: &'a Notification,
+    report: &ExecutionReport<'a>,
     status: Status,
-) -> Option<NotificationError<'_>> {
+) -> Option<NotificationError<'a>> {
+
     send_child(notification, &report, &status)
         .map_err(|e| NotificationError {
             name: Cow::Borrowed(&notification.name),
@@ -41,14 +43,15 @@ pub async fn send(
         .err()
 }
 
-async fn send_child(
+async fn send_child<'a>(
     notification: &Notification,
-    report: &[String],
+    report: &ExecutionReport<'a>,
     status: &Status,
 ) -> Result<(), Cow<'static, str>> {
     let NotificationMethod::Qmsg {
         endpoint,
         key,
+        show_ipaddr,
         msg_type,
         qq,
         bot,
@@ -56,6 +59,8 @@ async fn send_child(
     else {
         unreachable!()
     };
+    let report = show_full_report(&report, false, show_ipaddr.unwrap_or(false));
+
     let endpoint = endpoint.as_ref().map_or("https://qmsg.zendee.cn", |v| v);
     let url = match msg_type {
         QmsgConfigMsgType::Group => format!("{endpoint}/jgroup/{key}"),

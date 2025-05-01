@@ -94,7 +94,11 @@ pub fn show_brief_report(report: &ExecutionReport, color: bool) -> Vec<String> {
     content
 }
 
-pub fn show_full_report(report: &ExecutionReport, color: bool) -> Vec<String> {
+pub fn show_full_report(
+    report: &ExecutionReport,
+    color: bool,
+    show_ipaddr: bool,
+) -> Vec<String> {
     let mut content: Vec<String> = Vec::new();
     content.push(format!(
         "{} | {}",
@@ -111,25 +115,27 @@ pub fn show_full_report(report: &ExecutionReport, color: bool) -> Vec<String> {
             )
             .bright_green_if(color)
     ));
-    match &report.ip_fetching_status {
-        ExecutionReportIpFetching::Success { ipv4, ipv6 } => {
-            content.push(format!(
-                "{} | {}",
-                t!("IP 地址").bright_green_if(color),
-                vec![ipv4.as_ref(), ipv6.as_ref()]
-                    .into_iter()
-                    .filter(|s| !s.is_empty())
-                    .collect::<Vec<&str>>()
-                    .join(" / ")
-                    .bright_green_if(color)
-            ));
-        }
-        ExecutionReportIpFetching::Failed { error } => {
-            content.push(format!(
-                "{} | {}",
-                t!("获取 IP 失败").bright_red_if(color),
-                explain_error(error, color).join("\n")
-            ));
+    if show_ipaddr {
+        match &report.ip_fetching_status {
+            ExecutionReportIpFetching::Success { ipv4, ipv6 } => {
+                content.push(format!(
+                    "{} | {}",
+                    t!("IP 地址").bright_green_if(color),
+                    vec![ipv4.as_ref(), ipv6.as_ref()]
+                        .into_iter()
+                        .filter(|s| !s.is_empty())
+                        .collect::<Vec<&str>>()
+                        .join(" / ")
+                        .bright_green_if(color)
+                ));
+            }
+            ExecutionReportIpFetching::Failed { error } => {
+                content.push(format!(
+                    "{} | {}",
+                    t!("获取 IP 失败").bright_red_if(color),
+                    explain_error(error, color).join("\n")
+                ));
+            }
         }
     }
 
@@ -173,7 +179,7 @@ pub fn show_full_report(report: &ExecutionReport, color: bool) -> Vec<String> {
 
 fn explain_error(error: &Error, color: bool) -> Vec<String> {
     if let Some(sdkerror) = error.downcast_ref::<SdkError>() {
-        explain_sdkerror(sdkerror.clone(), color)
+        explain_sdkerror(sdkerror, color)
     } else if let Some(reqwest_error) = error.downcast_ref::<reqwest::Error>() {
         vec![format!(
             "{} | {}",
@@ -197,7 +203,7 @@ fn explain_error(error: &Error, color: bool) -> Vec<String> {
     }
 }
 
-fn explain_sdkerror(error: SdkError, color: bool) -> Vec<String> {
+fn explain_sdkerror(error: &SdkError, color: bool) -> Vec<String> {
     let indent_width = [
         t!("请求 ID").width(),
         t!("错误代码").width(),

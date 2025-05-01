@@ -2,7 +2,6 @@ use error::NotificationError;
 
 use super::report::{
     ExecutionReport, ExecutionReportIpFetching, ExecutionReportServerStatus,
-    show_full_report,
 };
 use crate::config::definition::{
     Notification, NotificationMethod, NotificationTrigger,
@@ -50,9 +49,6 @@ pub async fn send_notification<'a>(
         }
     };
 
-    // 生成报告字符串并复用，而不是每次都复制
-    let report_strings = show_full_report(report, false);
-
     // 使用迭代器和过滤器直接收集结果，减少中间集合
     futures::future::join_all(
         notifications
@@ -61,7 +57,7 @@ pub async fn send_notification<'a>(
             .map(|n| async {
                 send_single_notification(
                     n,
-                    report_strings.clone(),
+                    report,
                     status.clone(),
                 )
                 .await
@@ -89,11 +85,11 @@ fn should_notify(notification: &Notification, status: &Status) -> bool {
         }
     }
 }
-async fn send_single_notification(
-    notification: &Notification,
-    report: Vec<String>,
+async fn send_single_notification<'a>(
+    notification: &'a Notification,
+    report: &'a ExecutionReport<'a>,
     status: Status,
-) -> Option<NotificationError<'_>> {
+) -> Option<NotificationError<'a>> {
     match notification.method {
         NotificationMethod::Smtp { .. } => {
             smtp::send(notification, report, status)

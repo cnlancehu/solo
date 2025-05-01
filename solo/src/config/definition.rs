@@ -82,6 +82,7 @@ pub enum NotificationMethod {
         endpoint: Option<String>,
         key: String,
         msg_type: QmsgConfigMsgType,
+        show_ipaddr: Option<bool>,
 
         qq: Option<String>,
         bot: Option<String>,

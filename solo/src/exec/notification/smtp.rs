@@ -9,16 +9,18 @@ use lettre::{
 use rust_i18n::t;
 
 use super::{Status, error::NotificationError};
-use crate::config::definition::{
-    Notification, NotificationMethod, SmtpSecurity,
+use crate::{
+    config::definition::{Notification, NotificationMethod, SmtpSecurity},
+    exec::report::{ExecutionReport, show_full_report},
 };
 
-pub fn send(
-    notification: &Notification,
-    report: Vec<String>,
+pub fn send<'a>(
+    notification: &'a Notification,
+    report: &ExecutionReport<'a>,
     status: Status,
-) -> Option<NotificationError<'_>> {
-    // 使用 map_err 简化错误处理逻辑
+) -> Option<NotificationError<'a>> {
+    let report = show_full_report(&report, false, true);
+
     send_child(notification, &report, &status)
         .map_err(|e| NotificationError {
             name: Cow::Borrowed(&notification.name),
