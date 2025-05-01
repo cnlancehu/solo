@@ -26,7 +26,7 @@ Solo 自动检测当前的公网 IP，通过云服务商的 API 动态调整防�
 ## 指南
 
 ### 下载
-请前往 [Release](https://github.com/cnlancehu/solo/releases) 下载
+请前往 [下载页面](https://solo.lance.fun/zh/download/) 下载
 
 ### 文档
 见 [Solo Doc](https://solo.lance.fun/)
