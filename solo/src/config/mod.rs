@@ -17,7 +17,7 @@ lazy_static! {
         {
             use crate::EXE_DIR;
 
-            EXE_DIR.join("path")
+            EXE_DIR.join("conf")
         }
     };
     pub static ref CONFIG_LIST: Vec<ConfigFile> = get_config_list();
