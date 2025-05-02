@@ -27,10 +27,10 @@ pub struct Secret {
 /// Machine Type
 #[derive(Debug, Clone)]
 pub enum MachineType {
-    /// Swas instance
-    Swas,
+    /// SAS instance
+    Sas,
 
-    /// Ecs instance
+    /// ECS instance
     Ecs,
 }
 
@@ -38,7 +38,7 @@ impl MachineType {
     /// Returns (endpoint, version)
     pub fn service_info(&self, region_id: &str) -> (String, &'static str) {
         match self {
-            MachineType::Swas => {
+            MachineType::Sas => {
                 (format!("swas.{}.aliyuncs.com", region_id), "2020-06-01")
             }
             MachineType::Ecs => {

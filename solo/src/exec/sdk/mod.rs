@@ -43,8 +43,8 @@ pub async fn execute_server_task<'a>(
     });
 
     let result = match server.machine_type {
-        MachineType::QcloudVpc => {
-            qcloud::vpc(txx, client, server, ipv4, ipv6).await
+        MachineType::QcloudCvm => {
+            qcloud::cvm(txx, client, server, ipv4, ipv6).await
         }
         MachineType::QcloudLighthouse => {
             qcloud::lighthouse(txx, client, server, ipv4).await
@@ -52,9 +52,7 @@ pub async fn execute_server_task<'a>(
         MachineType::AliyunEcs => {
             aliyun::ecs(txx, client, server, ipv4, ipv6).await
         }
-        MachineType::AliyunSwas => {
-            aliyun::swas(txx, client, server, ipv4).await
-        }
+        MachineType::AliyunSas => aliyun::sas(txx, client, server, ipv4).await,
     };
     match result {
         Ok(r) => r,

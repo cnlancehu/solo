@@ -2,9 +2,9 @@
 //!
 //! Supports:
 //! - ECS [`ecs`]
-//! - Swas [`swas`]
+//! - SAS [`sas`]
 
 pub mod ecs;
-pub mod swas;
+pub mod sas;
 mod util;
 pub use util::*;

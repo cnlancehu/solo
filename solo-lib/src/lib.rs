@@ -10,7 +10,7 @@
 //! | Service Provider |         Products          |
 //! | :----: | :---------------------: |
 //! | Tencent Cloud | Cloud Server and Lighthouse |
-//! | Aliyun | Elastic Compute Service (ECS) and Simple Application Server (SWAS) |
+//! | Aliyun | Elastic Compute Service (ECS) and Simple Application Server (SAS) |
 
 pub mod client;
 mod error;

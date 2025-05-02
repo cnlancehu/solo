@@ -27,8 +27,8 @@ pub enum MachineType {
     /// Lighthouse instance
     Lighthouse,
 
-    /// VPC instance
-    Vpc,
+    /// Cvm instance
+    Cvm,
 }
 
 impl MachineType {
@@ -43,7 +43,7 @@ impl MachineType {
                 "2020-03-24",
                 "https://lighthouse.tencentcloudapi.com",
             ),
-            MachineType::Vpc => (
+            MachineType::Cvm => (
                 "vpc",
                 "vpc.tencentcloudapi.com",
                 "2017-03-12",

@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+use super::serde::deserialize_untagged_enum_case_insensitive;
 use crate::exec::ipfetcher::{IpProvider, Protocol};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -11,17 +12,20 @@ pub struct ConfigFile {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum MachineType {
-    QcloudVpc,
+    QcloudCvm,
     QcloudLighthouse,
     AliyunEcs,
-    AliyunSwas,
+    AliyunSas,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     pub name: String,
     pub servers: Vec<Server>,
-    #[serde(default)]
+    #[serde(
+        default,
+        deserialize_with = "deserialize_untagged_enum_case_insensitive"
+    )]
     pub schedule: Schedule,
     #[serde(default)]
     pub ip_provider: IpProvider,
@@ -32,6 +36,8 @@ pub struct Config {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Server {
     pub name: String,
+
+    #[serde(deserialize_with = "deserialize_untagged_enum_case_insensitive")]
     pub machine_type: MachineType,
     pub machine_id: String,
     pub region: String,
@@ -39,6 +45,7 @@ pub struct Server {
     pub secret_id: String,
     pub secret_key: String,
 
+    #[serde(deserialize_with = "deserialize_untagged_enum_case_insensitive")]
     pub protocol: Protocol,
     pub rules: Vec<String>,
 }
@@ -61,11 +68,14 @@ impl Default for Schedule {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Notification {
     pub name: String,
+    #[serde(deserialize_with = "deserialize_untagged_enum_case_insensitive")]
     pub trigger: NotificationTrigger,
+    #[serde(deserialize_with = "deserialize_untagged_enum_case_insensitive")]
     pub method: NotificationMethod,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum NotificationTrigger {
     OnSuccess,
     OnSuccessFullyChanged,
@@ -78,6 +88,7 @@ pub enum NotificationTrigger {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum NotificationMethod {
     Smtp {
         host: String,

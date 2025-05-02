@@ -10,7 +10,7 @@ use crate::{
     exec::report::{ExecutionReportServer, ExecutionReportServerStatus},
 };
 
-pub async fn vpc<'a>(
+pub async fn cvm<'a>(
     tx: Sender<Cow<'a, str>>,
 
     client: &Client,
@@ -19,7 +19,7 @@ pub async fn vpc<'a>(
     ipv4: Cow<'a, str>,
     ipv6: Cow<'a, str>,
 ) -> Result<ExecutionReportServer<'a>> {
-    use solo_lib::sdk::qcloud::vpc::{
+    use solo_lib::sdk::qcloud::cvm::{
         SecurityGroup, compare_rules, list_rules, modify_rules,
     };
 

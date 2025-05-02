@@ -1,4 +1,4 @@
-//! # Aliyun Swas
+//! # Aliyun SAS
 //!
 //! Begin with the [`go`] function
 
@@ -66,7 +66,7 @@ pub struct CreateFirewallRulesResponse {
 /// ```rust
 /// use solo_lib::sdk::aliyun::{
 ///     Secret,
-///     swas::{Instance, go},
+///     sas::{Instance, go},
 /// };
 ///
 /// #[tokio::main]
@@ -142,7 +142,7 @@ pub async fn list_rules(
         ("PageSize", "100"),
     ];
     let basic_request = BasicRequest {
-        machine_type: MachineType::Swas,
+        machine_type: MachineType::Sas,
         region_id: instance.region.as_str(),
         action: "ListFirewallRules",
         secret: secret.borrow(),
@@ -208,7 +208,7 @@ pub async fn delete_rules(
         ("RuleIds", rule_ids.as_str()),
     ];
     let basic_request = BasicRequest {
-        machine_type: MachineType::Swas,
+        machine_type: MachineType::Sas,
         region_id: instance.region.as_str(),
         action: "DeleteFirewallRules",
         secret: secret.borrow(),
@@ -241,7 +241,7 @@ pub async fn create_rules(
         ("FirewallRules", &rules),
     ];
     let basic_request = BasicRequest {
-        machine_type: MachineType::Swas,
+        machine_type: MachineType::Sas,
         region_id: instance.region.as_str(),
         action: "CreateFirewallRules",
         secret: secret.borrow(),

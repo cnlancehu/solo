@@ -65,7 +65,7 @@ pub async fn ecs<'a>(
     }
 }
 
-pub async fn swas<'a>(
+pub async fn sas<'a>(
     tx: Sender<Cow<'a, str>>,
 
     client: &Client,
@@ -73,7 +73,7 @@ pub async fn swas<'a>(
 
     ipv4: Cow<'a, str>,
 ) -> Result<ExecutionReportServer<'a>> {
-    use solo_lib::sdk::aliyun::swas::{
+    use solo_lib::sdk::aliyun::sas::{
         Instance, compare_rules, create_rules, delete_rules, list_rules,
     };
 

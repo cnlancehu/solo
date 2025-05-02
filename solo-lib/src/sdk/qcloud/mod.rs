@@ -1,10 +1,10 @@
 //! # Qcloud SDK
 //!
 //! Supports:
-//! - VPC [`vpc`]
+//! - CVM [`cvm`]
 //! - Lighthouse [`lighthouse`]
 
+pub mod cvm;
 pub mod lighthouse;
 mod util;
-pub mod vpc;
 pub use util::*;

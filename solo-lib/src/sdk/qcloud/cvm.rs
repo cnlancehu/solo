@@ -1,4 +1,4 @@
-//! # Qcloud VPC
+//! # Qcloud CVM
 //!
 //! Begin with the [`go`] function
 
@@ -134,7 +134,7 @@ pub struct ReplaceSecurityGroupPoliciesRequest {
 /// ```rust
 /// use solo_lib::sdk::qcloud::{
 ///     Secret,
-///     vpc::{SecurityGroup, go},
+///     cvm::{SecurityGroup, go},
 /// };
 ///
 /// #[tokio::main]
@@ -209,7 +209,7 @@ pub async fn list_rules(
     };
     let payload = serde_json::to_string(&request)?;
     let basic_request = BasicRequest {
-        machine_type: MachineType::Vpc,
+        machine_type: MachineType::Cvm,
         action: "DescribeSecurityGroupPolicies",
         payload,
         region: security_group.region.clone(),
@@ -288,7 +288,7 @@ pub async fn modify_rules(
     };
     let payload = serde_json::to_string(&request)?;
     let basic_request = BasicRequest {
-        machine_type: MachineType::Vpc,
+        machine_type: MachineType::Cvm,
         action: "ReplaceSecurityGroupPolicies",
         payload,
         region: security_group.region.clone(),
