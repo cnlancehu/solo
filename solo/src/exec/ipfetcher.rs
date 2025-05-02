@@ -24,6 +24,12 @@ pub enum IpProvider {
     Embed(EmbedIpProvider),
 }
 
+impl Default for IpProvider {
+    fn default() -> Self {
+        Self::Embed(EmbedIpProvider::MyExternalIp)
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum EmbedIpProvider {

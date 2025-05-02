@@ -77,7 +77,7 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
                 &str,
                 span.start,
                 span.end,
-                e.message().to_string().into(),
+                &Cow::from(e.message().to_string()),
                 None,
             );
             exit(1);
@@ -99,7 +99,7 @@ fn print_config_error(
 
     start: usize,
     end: usize,
-    message: Cow<'static, str>,
+    message: &Cow<'static, str>,
     help: Option<Cow<'static, str>>,
 ) {
     println!("{}", t!("配置文件中存在错误").bright_red());

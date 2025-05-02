@@ -21,8 +21,11 @@ pub enum MachineType {
 pub struct Config {
     pub name: String,
     pub servers: Vec<Server>,
+    #[serde(default)]
     pub schedule: Schedule,
+    #[serde(default)]
     pub ip_provider: IpProvider,
+    #[serde(default)]
     pub notifications: Vec<Notification>,
 }
 
@@ -49,6 +52,12 @@ pub enum Schedule {
     ),
 }
 
+impl Default for Schedule {
+    fn default() -> Self {
+        Self::Once
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Notification {
     pub name: String,
@@ -57,17 +66,18 @@ pub struct Notification {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
 pub enum NotificationTrigger {
     OnSuccess,
     OnSuccessFullyChanged,
     OnFailure,
+
     /// `OnSuccessFullyChanged` and `OnFailure`
     Both,
+    /// `OnSuccess` and `OnFailure`
+    Always,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
 pub enum NotificationMethod {
     Smtp {
         host: String,

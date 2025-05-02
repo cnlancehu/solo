@@ -79,6 +79,7 @@ fn should_notify(notification: &Notification, status: &Status) -> bool {
         NotificationTrigger::Both => {
             *status == Status::SuccessFullyChanged || *status == Status::Failed
         }
+        NotificationTrigger::Always => true,
     }
 }
 
