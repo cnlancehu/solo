@@ -42,6 +42,7 @@ pub struct Server {
     pub machine_id: String,
     pub region: String,
 
+    #[serde(default)]
     pub secret_id: String,
     pub secret_key: String,
 

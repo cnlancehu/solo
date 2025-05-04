@@ -174,20 +174,16 @@ fn print_config_error(
     }
 }
 
-// More efficient implementation of index_to_line_and_column
 fn index_to_line_and_column(s: &str, index: usize) -> (usize, usize) {
     if index >= s.len() {
-        // Handle out of bounds index gracefully
         let lines = s.lines().count();
         let last_line_len = s.lines().last().map_or(0, str::len);
         return (lines, last_line_len + 1);
     }
 
-    // Faster method: first split the string at the index
     let before = &s[..index];
     let line = before.chars().filter(|&c| c == '\n').count() + 1;
 
-    // Find the last newline before the index
     let column = before
         .rfind('\n')
         .map_or_else(|| index + 1, |pos| index - pos);

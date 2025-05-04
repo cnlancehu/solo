@@ -47,12 +47,10 @@ fn send_child(
         unreachable!()
     };
 
-    // 创建一个函数来处理错误转换，减少代码重复
     let handle_error = |e: smtp::Error| -> Cow<'static, str> {
         t!("无法连接至邮箱 | %{error}", error = e.to_string())
     };
 
-    // 使用更简洁的主题获取方式
     let subject = if status == &Status::Failed {
         t!("Solo: 运行失败")
     } else {
@@ -73,7 +71,6 @@ fn send_child(
 
     let creds = Credentials::new(username.clone(), password.clone());
 
-    // 构建邮件发送器
     let mailer = match security {
         SmtpSecurity::None => SmtpTransport::builder_dangerous(host)
             .port(*port)
