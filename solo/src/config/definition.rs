@@ -22,10 +22,7 @@ pub enum MachineType {
 pub struct Config {
     pub name: String,
     pub servers: Vec<Server>,
-    #[serde(
-        default,
-        deserialize_with = "deserialize_untagged_enum_case_insensitive"
-    )]
+    #[serde(default)]
     pub schedule: Schedule,
     #[serde(default)]
     pub ip_provider: IpProvider,

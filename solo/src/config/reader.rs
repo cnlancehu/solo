@@ -99,7 +99,7 @@ fn print_config_error(
 
     start: usize,
     end: usize,
-    message: &Cow<'static, str>,
+    message: &str,
     help: Option<Cow<'static, str>>,
 ) {
     println!("{}", t!("配置文件中存在错误").bright_red());

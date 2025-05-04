@@ -1,4 +1,7 @@
-use error::NotificationError;
+use std::sync::Arc;
+
+use cnxt::Colorize as _;
+use error::{NotificationError, explain_error};
 
 use super::report::{
     ExecutionReport, ExecutionReportIpFetching, ExecutionReportServerStatus,
@@ -23,8 +26,11 @@ pub enum Status {
 
 pub async fn send_notification<'a>(
     notifications: &'a [Notification],
-    report: &'a ExecutionReport<'static>,
-) -> Vec<NotificationError<'a>> {
+    report: ExecutionReport<'a>,
+
+    max_config_name_length: usize,
+    config_num: usize,
+) {
     let status = if let ExecutionReportIpFetching::Failed { .. } =
         report.ip_fetching_status
     {
@@ -52,18 +58,37 @@ pub async fn send_notification<'a>(
         }
     };
 
-    futures::future::join_all(
+    let report = Arc::new(report);
+    let status = Arc::new(status);
+    let errors: Vec<NotificationError<'a>> = futures::future::join_all(
         notifications
             .iter()
             .filter(|n| should_notify(n, &status))
-            .map(|n| async {
-                send_single_notification(n, report, status.clone()).await
+            .map(|n| {
+                let report = report.clone();
+                let status = status.clone();
+                async move { send_single_notification(n, report, status).await }
             }),
     )
     .await
     .into_iter()
     .flatten()
-    .collect()
+    .collect();
+
+    if !errors.is_empty() {
+        let error_message = explain_error(errors);
+        for msg in error_message {
+            if config_num == 1 {
+                println!("{msg}");
+            } else {
+                println!(
+                    "{:<max_config_name_length$} | {}",
+                    report.config_name,
+                    msg.bright_red()
+                );
+            }
+        }
+    }
 }
 
 fn should_notify(notification: &Notification, status: &Status) -> bool {
@@ -85,20 +110,20 @@ fn should_notify(notification: &Notification, status: &Status) -> bool {
 
 async fn send_single_notification<'a>(
     notification: &'a Notification,
-    report: &'a ExecutionReport<'a>,
-    status: Status,
+    report: Arc<ExecutionReport<'a>>,
+    status: Arc<Status>,
 ) -> Option<NotificationError<'a>> {
     match notification.method {
         NotificationMethod::Smtp { .. } => {
-            smtp::send(notification, report, status)
+            smtp::send(notification, &report, status)
         }
         NotificationMethod::Qmsg { .. } => {
-            qmsg::send(notification, report, status).await
+            qmsg::send(notification, &report, status).await
         }
         NotificationMethod::System => {
             #[cfg(target_os = "windows")]
             {
-                system::send(notification, report, status).await
+                system::send(notification, &report, status).await
             }
             #[cfg(not(target_os = "windows"))]
             {

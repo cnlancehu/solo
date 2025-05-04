@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, sync::Arc};
 
 use anyhow::Result;
 use futures::TryFutureExt as _;
@@ -31,7 +31,7 @@ struct QmsgResponse {
 pub async fn send<'a>(
     notification: &'a Notification,
     report: &ExecutionReport<'a>,
-    status: Status,
+    status: Arc<Status>,
 ) -> Option<NotificationError<'a>> {
     send_child(notification, report, &status)
         .map_err(|e| NotificationError {

@@ -5,7 +5,7 @@ use cnxt::Colorize;
 use futures::stream::{FuturesUnordered, StreamExt};
 use hashbrown::HashMap;
 use ipfetcher::{IpAddress, IpProvider, Protocol, fetch_ip};
-use notification::{error::explain_error, send_notification};
+use notification::send_notification;
 use report::{ExecutionReport, ExecutionReportIpFetching, show_brief_report};
 use rust_i18n::t;
 use sdk::execute_server_task;
@@ -108,24 +108,13 @@ pub async fn run(config_args: Vec<String>) {
                         }
                         active_tasks -= 1;
 
-                        let notification_result = send_notification(
+                        send_notification(
                             id_config_notifications.get(&report.id).unwrap(),
-                            &report,
+                            report,
+
+                            1,
+                            0,
                         ).await;
-                        if !notification_result.is_empty() {
-                            let error_message = explain_error(notification_result);
-                            for msg in error_message {
-                                if config_num == 1 {
-                                    println!("{msg}");
-                                } else {
-                                    println!(
-                                        "{:<max_config_name_length$} | {}",
-                                        id_config_name.get(&report.id).map_or("", |v| v).bright_red(),
-                                        msg.bright_red()
-                                    );
-                                }
-                            }
-                        }
                     },
                     Some(Schedule::Loop(interval)) => {
                         if config_num == 1 {
@@ -144,24 +133,17 @@ pub async fn run(config_args: Vec<String>) {
                         let handle = execute_task(report.id, tx.clone(), config[report.id].clone(), *interval);
                         futures.push(handle);
 
-                        // TODO: Blockage occurs here
-                        let notification_result = send_notification(
-                            id_config_notifications.get(&report.id).unwrap(),
-                            &report,
-                        ).await;
-                        if !notification_result.is_empty() {
-                            let error_message = explain_error(notification_result);
-                            for msg in error_message {
-                                if config_num == 1 {
-                                    println!("{msg}");
-                                } else {
-                                    println!(
-                                        "{:<max_config_name_length$} | {}",
-                                        id_config_name.get(&report.id).map_or("", |v| v).bright_red(),
-                                        msg.bright_red()
-                                    );
-                                }
-                            }
+                        if let Some(notifications) = id_config_notifications.get(&report.id).cloned() {
+                            tokio::task::spawn_blocking(move || {
+                                tokio::runtime::Handle::current().block_on(async {
+                                    let _ = send_notification(
+                                        &notifications,
+                                        report,
+                                        max_config_name_length,
+                                        config_num,
+                                    ).await;
+                                })
+                            });
                         }
                     }
                     None => (),
