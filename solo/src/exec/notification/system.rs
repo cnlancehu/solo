@@ -8,6 +8,7 @@ use std::{
 };
 
 use futures::TryFutureExt as _;
+use rand::Rng;
 use rust_i18n::t;
 use tauri_winrt_notification::{Duration, IconCrop, Progress, Sound, Toast};
 use tokio::{fs, time::sleep};
@@ -62,7 +63,7 @@ async fn send_child<'a>(
     };
 
     let text = match status {
-        Status::Failed => t!("点击以查看错误信息\n30 秒内有效"),
+        Status::Failed => t!("点击以查看错误信息"),
         Status::SuccessButNotChanged => t!("IP 相同"),
         Status::SuccessFullyChanged => t!("IP 更改成功"),
     };
@@ -83,7 +84,7 @@ async fn send_child<'a>(
         })?;
     } else {
         let mut progress = Progress {
-            tag: "solo".to_string(),
+            tag: generate_id(),
             title: t!("请在 %{time} 秒内操作", time = 30).to_string(),
             status: t!("倒计时").to_string(),
             value: 100.0,
@@ -99,14 +100,15 @@ async fn send_child<'a>(
             .add_button(&t!("查看错误信息"), "1")
             .add_button(&t!("取消"), "2")
             .on_activated({
-                // Use an Arc<AtomicBool> to signal activation
                 move |action| {
-                    if let Some(action) = action {
-                        if action == *"1" {
-                            let report_path = EXE_DIR.join("soloreport.txt");
-                            let _ = std::fs::write(&report_path, &report);
-                            let () = opener::open(report_path).unwrap();
-                        }
+                    // Process the action, or execute the same logic if action is None
+                    if action.is_some()
+                        && action.as_ref().map(|s| s.as_str()) == Some("1")
+                        || action.is_none()
+                    {
+                        let report_path = EXE_DIR.join("soloreport.txt");
+                        let _ = std::fs::write(&report_path, &report);
+                        let _ = opener::open(report_path);
                     }
                     activated_check.store(true, Ordering::SeqCst);
                     Ok(())
@@ -126,9 +128,18 @@ async fn send_child<'a>(
                 break;
             }
             sleep(time::Duration::from_secs(1)).await;
-            progress.value = i as f32 / 30.0;
-            progress.value_string = format!("{i}s");
-            progress.title = t!("请在 %{time} 秒内操作", time = i).to_string();
+            if i == 0 {
+                progress.value = 0.0;
+                progress.value_string = String::new();
+                progress.title = t!("已超时", time = i).to_string();
+                progress.status =
+                    t!("请手动运行 Solo 来查看错误信息").to_string();
+            } else {
+                progress.value = i as f32 / 30.0;
+                progress.value_string = format!("{i}s");
+                progress.title =
+                    t!("请在 %{time} 秒内操作", time = i).to_string();
+            }
             toast.set_progress(&progress).map_err(
                 |e| -> Cow<'static, str> {
                     Cow::Owned(
@@ -144,4 +155,12 @@ async fn send_child<'a>(
     }
 
     Ok(())
+}
+
+fn generate_id() -> String {
+    const CHARSET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let mut rng = rand::rng();
+    (0..6)
+        .map(|_| CHARSET[rng.random_range(0..CHARSET.len())] as char)
+        .collect()
 }
