@@ -136,13 +136,13 @@ pub async fn run(config_args: Vec<String>) {
                         if let Some(notifications) = id_config_notifications.get(&report.id).cloned() {
                             tokio::task::spawn_blocking(move || {
                                 tokio::runtime::Handle::current().block_on(async {
-                                    let _ = send_notification(
+                                    let () = send_notification(
                                         &notifications,
                                         report,
                                         max_config_name_length,
                                         config_num,
                                     ).await;
-                                })
+                                });
                             });
                         }
                     }

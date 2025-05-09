@@ -6,7 +6,9 @@ use rust_i18n::t;
 use unicode_width::UnicodeWidthStr as _;
 use walkdir::WalkDir;
 
-use super::definition::{Config, ConfigFile};
+use super::definition::{
+    Config, ConfigFile, MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID,
+};
 use crate::{cli::EXE_NAME, config::get_config_path};
 
 pub fn show_avaliable_configs() {
@@ -82,6 +84,29 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
             );
             exit(1);
         })?;
+
+        for server in &config.servers {
+            if server.secret_id.is_empty() {
+                if MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID
+                    .contains(&server.machine_type)
+                {
+                    continue;
+                } else {
+                    println!("{}", t!("配置文件中存在错误").bright_red());
+                    println!(
+                        "{}",
+                        t!(
+                            "服务器 %{name} 的 secret_id 不能为空",
+                            name = server.name
+                        )
+                        .bright_red()
+                    );
+
+                    exit(1);
+                }
+            }
+        }
+
         configs.push(config);
     }
     Ok(configs)

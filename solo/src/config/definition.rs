@@ -3,13 +3,15 @@ use serde::{Deserialize, Serialize};
 use super::serde::deserialize_untagged_enum_case_insensitive;
 use crate::exec::ipfetcher::{IpProvider, Protocol};
 
+pub const MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID: &[MachineType] = &[];
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ConfigFile {
     pub name: String,
     pub filename: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum MachineType {
     QcloudCvm,

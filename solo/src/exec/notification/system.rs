@@ -102,8 +102,7 @@ async fn send_child<'a>(
             .on_activated({
                 move |action| {
                     // Process the action, or execute the same logic if action is None
-                    if action.is_some()
-                        && action.as_deref() == Some("1")
+                    if action.is_some() && action.as_deref() == Some("1")
                         || action.is_none()
                     {
                         let report_path = EXE_DIR.join("soloreport.txt");
