@@ -71,7 +71,7 @@ def ci_build():
                 app_name_with_extension = f"{app_name}.exe"
             else:
                 app_name_with_extension = app_name
-            zipf.write(os.path.join("target", target, "release", app_name_with_extension), arcname=app_name_with_extension)
+            zipf.write(os.path.join("target", target, "release", app_name_with_extension), arcname=app_name_with_extension, compresslevel=3)
             os_name, arch = alias.split("-")
         headers = {
             'token': token,
