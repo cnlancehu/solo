@@ -91,19 +91,18 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
                     .contains(&server.machine_type)
                 {
                     continue;
-                } else {
-                    println!("{}", t!("配置文件中存在错误").bright_red());
-                    println!(
-                        "{}",
-                        t!(
-                            "服务器 %{name} 的 secret_id 不能为空",
-                            name = server.name
-                        )
-                        .bright_red()
-                    );
-
-                    exit(1);
                 }
+                println!("{}", t!("配置文件中存在错误").bright_red());
+                println!(
+                    "{}",
+                    t!(
+                        "服务器 %{name} 的 secret_id 不能为空",
+                        name = server.name
+                    )
+                    .bright_red()
+                );
+
+                exit(1);
             }
         }
 

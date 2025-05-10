@@ -5,6 +5,7 @@ use lazy_static::lazy_static;
 use reader::get_config_list;
 
 pub mod definition;
+pub mod new;
 pub mod reader;
 pub mod serde;
 

@@ -19,7 +19,9 @@ use cli::{
     ManageConfigAction, parse, show_conf_help, show_help,
 };
 use cnxt::Colorize as _;
-use config::{CONFIG_DETECTION_PATH, reader::show_avaliable_configs};
+use config::{
+    CONFIG_DETECTION_PATH, new::new_config, reader::show_avaliable_configs,
+};
 use lazy_static::lazy_static;
 use rust_i18n::set_locale;
 use sys_locale::get_locale;
@@ -72,6 +74,9 @@ async fn main() {
         ManageConfig(action) => match action {
             ManageConfigAction::ShowHelp => show_conf_help(),
             ManageConfigAction::List => show_avaliable_configs(),
+            ManageConfigAction::New => {
+                new_config().unwrap();
+            }
             _ => todo!(),
         },
         ShowVersion => todo!(),

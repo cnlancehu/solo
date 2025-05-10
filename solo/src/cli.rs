@@ -326,7 +326,7 @@ pub fn show_conf_help() {
     ));
     help.push(format!("{}", t!("可用命令:").bright_green()));
     help.push(help_print_subcommand("list", &t!("列出可用的配置")));
-    // help.push(help_print_subcommand("new", &t!("创建一个新的配置")));
+    help.push(help_print_subcommand("new", &t!("创建一个新的配置")));
     // help.push(help_print_subcommand("del", &t!("删除一个配置")));
     // help.push(help_print_subcommand("edit", &t!("编辑一个配置")));
     help.push(help_print_subcommand("help", &t!("显示此帮助信息")));
