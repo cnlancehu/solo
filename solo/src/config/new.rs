@@ -17,6 +17,7 @@ use unicode_width::UnicodeWidthStr;
 
 use super::definition::{Config, MachineType, Schedule, Server};
 use crate::{
+    cli::EXE_NAME,
     config::CONFIG_DETECTION_PATH,
     exec::ipfetcher::{EmbedIpProvider, IpProvider, Protocol},
 };
@@ -40,9 +41,9 @@ pub fn new_config() -> Result<()> {
 
     match get_config_filename()? {
         InputResult::Value(filename) => {
-            let filename = format!("{filename}{FILE_SUFFIX}");
+            let full_filename = format!("{filename}{FILE_SUFFIX}");
             let config = generate_example_config();
-            let config_path = CONFIG_DETECTION_PATH.join(&filename);
+            let config_path = CONFIG_DETECTION_PATH.join(&full_filename);
 
             if config_path.exists() {
                 println!("{}", t!("文件已存在").bright_red());
@@ -56,6 +57,14 @@ pub fn new_config() -> Result<()> {
                 t!("配置文件已创建").bright_green(),
                 t!("位于").bright_cyan(),
                 config_path.display().to_string().bright_yellow()
+            );
+            println!("",);
+            println!("{}", t!("编辑它，然后使用以下命令运行").bright_cyan());
+            println!(
+                "{} {} {}",
+                EXE_NAME.bright_cyan(),
+                "go".bright_magenta(),
+                filename.bright_green()
             );
         }
         InputResult::Cancelled => {
