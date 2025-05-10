@@ -55,8 +55,6 @@ def ci_build():
 
     if os_type == "Windows":
         os.environ["RUSTFLAGS"] = "-C target-feature=+crt-static -C link-arg=/DEBUG:NONE"
-    else:
-        os.environ["RUSTFLAGS"] = "-C target-feature=+crt-static"
 
     if os_type == "Linux":
         subprocess.Popen("sudo apt update", stdout=subprocess.PIPE, text=True, shell=True).wait()
