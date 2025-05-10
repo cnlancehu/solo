@@ -8,9 +8,9 @@ authors = ["Lance <me@lance.fun>"]
 repository = "https://github.com/cnlancehu/solo"
 
 [dependencies]
-anyhow = "1.0.97"
-chrono = "0.4.40"
-hashbrown = "0.15.2"
+anyhow = "1.0.98"
+chrono = "0.4.41"
+hashbrown = "0.15.3"
 hex = "0.4.3"
 hmac = "0.12.1"
 http = "1.3.1"
@@ -22,6 +22,6 @@ reqwest = { version = "0.12.15", default-features = false, features = [
 ] }
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.140"
-sha2 = "0.10.8"
+sha2 = "0.10.9"
 thiserror = "2.0.12"
-tokio = { version = "1.44.2", features = ["full"] }
+tokio = { version = "1.45.0", features = ["full"] }
