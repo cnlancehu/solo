@@ -3,8 +3,9 @@ name = "solo"
 description = "An port management app for cloud safety."
 version = "0.1.5"
 edition = "2024"
-license = "MIT"
+license = "Apache-2.0"
 authors = ["Lance <me@lance.fun>"]
+documentation = "https://solo.lance.fun"
 repository = "https://github.com/cnlancehu/solo"
 
 [dependencies]
