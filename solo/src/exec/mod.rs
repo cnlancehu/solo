@@ -4,7 +4,7 @@ use chrono::Local;
 use cnxt::Colorize;
 use futures::stream::{FuturesUnordered, StreamExt};
 use hashbrown::HashMap;
-use ipfetcher::{IpAddress, IpProvider, Protocol, fetch_ip};
+use ipfetcher::{Protocol, fetch_ip};
 use notification::send_notification;
 use report::{ExecutionReport, ExecutionReportIpFetching, show_brief_report};
 use rust_i18n::t;
@@ -136,7 +136,7 @@ pub async fn run(config_args: Vec<String>) {
                         if let Some(notifications) = id_config_notifications.get(&report.id).cloned() {
                             tokio::task::spawn_blocking(move || {
                                 tokio::runtime::Handle::current().block_on(async {
-                                    let () = send_notification(
+                                    send_notification(
                                         &notifications,
                                         report,
                                         max_config_name_length,
@@ -196,14 +196,19 @@ fn execute_task<'a>(
             config.servers[0].protocol
         };
 
-        match task_fetch_ip(protocol, config.ip_provider).await {
+        match fetch_ip(protocol, config.ip_provider).await {
             Ok((ipv4, ipv6)) => {
                 let ipfetching_result = ExecutionReportIpFetching::Success {
                     ipv4: ipv4.clone(),
                     ipv6: ipv6.clone(),
                 };
 
-                let client = client::new();
+                let mut builder = client::new_builder();
+                if config.no_proxy.unwrap_or(false) {
+                    builder = builder.no_proxy();
+                }
+                let client = builder.build().unwrap();
+
                 let mut server_result = Vec::new();
                 for server in config.servers {
                     let result = execute_server_task(
@@ -239,20 +244,4 @@ fn execute_task<'a>(
             }
         }
     })
-}
-
-async fn task_fetch_ip<'a>(
-    protocol: Protocol,
-    ip_provider: IpProvider,
-) -> Result<(Cow<'a, str>, Cow<'a, str>), anyhow::Error> {
-    let ip = fetch_ip(protocol, ip_provider).await?;
-    let ipv4 = match &ip {
-        IpAddress::V4 { v4 } | IpAddress::Both { v4, .. } => v4.clone(),
-        IpAddress::V6 { .. } => Cow::Borrowed(""),
-    };
-    let ipv6 = match &ip {
-        IpAddress::V4 { .. } => Cow::Borrowed(""),
-        IpAddress::V6 { v6 } | IpAddress::Both { v6, .. } => v6.clone(),
-    };
-    Ok((ipv4, ipv6))
 }

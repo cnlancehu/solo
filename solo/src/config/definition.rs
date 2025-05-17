@@ -30,6 +30,8 @@ pub struct Config {
     pub ip_provider: IpProvider,
     #[serde(default)]
     pub notifications: Vec<Notification>,
+
+    pub no_proxy: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -139,6 +141,7 @@ mod tests {
             schedule: Schedule::Loop(60),
             ip_provider: IpProvider::Embed(EmbedIpProvider::CurlMyIp),
             notifications: vec![],
+            no_proxy: None,
         };
 
         let config = toml::to_string(&config).unwrap();

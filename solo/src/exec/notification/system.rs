@@ -23,7 +23,7 @@ use crate::{
 pub async fn send<'a>(
     notification: &'a Notification,
     report: &ExecutionReport<'a>,
-    status: Arc<Status>,
+    status: &Arc<Status>,
 ) -> Option<NotificationError<'a>> {
     send_child(report, &status)
         .map_err(|e| NotificationError {

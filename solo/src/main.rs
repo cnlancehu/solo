@@ -51,11 +51,10 @@ async fn main() {
     }
 
     // Set locale
-    let locale = if let Some(locale) = detect_locale_from_env() {
-        locale
-    } else {
-        get_locale().unwrap_or_else(|| "en-US".to_string())
-    };
+    let locale = detect_locale_from_env().map_or_else(
+        || get_locale().unwrap_or_else(|| "en-US".to_string()),
+        |locale| locale,
+    );
     set_locale(&locale);
 
     println!(

@@ -17,7 +17,7 @@ use crate::{
 pub fn send<'a>(
     notification: &'a Notification,
     report: &ExecutionReport<'a>,
-    status: Arc<Status>,
+    status: &Arc<Status>,
 ) -> Option<NotificationError<'a>> {
     let report = show_full_report(report, false, true);
 

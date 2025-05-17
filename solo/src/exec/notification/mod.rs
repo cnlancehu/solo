@@ -115,15 +115,15 @@ async fn send_single_notification<'a>(
 ) -> Option<NotificationError<'a>> {
     match notification.method {
         NotificationMethod::Smtp { .. } => {
-            smtp::send(notification, &report, status)
+            smtp::send(notification, &report, &status)
         }
         NotificationMethod::Qmsg { .. } => {
-            qmsg::send(notification, &report, status).await
+            qmsg::send(notification, &report, &status).await
         }
         NotificationMethod::System => {
             #[cfg(target_os = "windows")]
             {
-                system::send(notification, &report, status).await
+                system::send(notification, &report, &status).await
             }
             #[cfg(not(target_os = "windows"))]
             {

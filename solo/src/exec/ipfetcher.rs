@@ -51,24 +51,10 @@ impl EmbedIpProvider {
     }
 }
 
-#[derive(Debug, Clone)]
-pub enum IpAddress {
-    V4 {
-        v4: Cow<'static, str>,
-    },
-    V6 {
-        v6: Cow<'static, str>,
-    },
-    Both {
-        v4: Cow<'static, str>,
-        v6: Cow<'static, str>,
-    },
-}
-
-pub async fn fetch_ip(
+pub async fn fetch_ip<'a>(
     protocol: Protocol,
     provider: IpProvider,
-) -> Result<IpAddress> {
+) -> Result<(Cow<'a, str>, Cow<'a, str>)> {
     let url = match provider {
         IpProvider::Url(url) => url,
         IpProvider::Embed(embed) => embed.url(),
@@ -77,21 +63,18 @@ pub async fn fetch_ip(
     match protocol {
         Protocol::V4 => {
             let ip = fetch_ipv4(&url).await?;
-            Ok(IpAddress::V4 { v4: Cow::Owned(ip) })
+            Ok((Cow::Owned(ip), Cow::Borrowed("")))
         }
         Protocol::V6 => {
             let ip = fetch_ipv6(&url).await?;
-            Ok(IpAddress::V6 { v6: Cow::Owned(ip) })
+            Ok((Cow::Borrowed(""), Cow::Owned(ip)))
         }
         Protocol::Both => {
             let (v4_result, v6_result) =
                 tokio::join!(fetch_ipv4(&url), fetch_ipv6(&url));
             let v4 = v4_result?;
             let v6 = v6_result?;
-            Ok(IpAddress::Both {
-                v4: Cow::Owned(v4),
-                v6: Cow::Owned(v6),
-            })
+            Ok((Cow::Owned(v4), Cow::Owned(v6)))
         }
     }
 }
