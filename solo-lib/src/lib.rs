@@ -12,6 +12,7 @@
 //! | :-----------: | :------------------------------------------------: |
 //! | Tencent Cloud |         Cloud Virtual Machine, Lighthouse          |
 //! |    Aliyun     | Elastic Compute Service, Simple Application Server |
+//! |    Rainyun    |                     RCS                            |
 
 pub mod client;
 mod error;

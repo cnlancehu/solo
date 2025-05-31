@@ -3,7 +3,11 @@ use serde::{Deserialize, Serialize};
 use super::serde::deserialize_untagged_enum_case_insensitive;
 use crate::exec::ipfetcher::{IpProvider, Protocol};
 
-pub const MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID: &[MachineType] = &[];
+pub const MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID: &[MachineType] =
+    &[MachineType::RainyunRcs];
+
+pub const MACHINE_TYPES_WITH_OPTIONAL_REGION_ID: &[MachineType] =
+    &[MachineType::RainyunRcs];
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ConfigFile {
@@ -18,6 +22,7 @@ pub enum MachineType {
     QcloudLighthouse,
     AliyunEcs,
     AliyunSas,
+    RainyunRcs,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -41,6 +46,8 @@ pub struct Server {
     #[serde(deserialize_with = "deserialize_untagged_enum_case_insensitive")]
     pub machine_type: MachineType,
     pub machine_id: String,
+
+    #[serde(default)]
     pub region: String,
 
     #[serde(default)]

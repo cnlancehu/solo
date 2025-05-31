@@ -58,7 +58,7 @@ pub fn new_config() -> Result<()> {
                 t!("位于").bright_cyan(),
                 config_path.display().to_string().bright_yellow()
             );
-            println!("",);
+            println!("");
             println!("{}", t!("编辑它，然后使用以下命令运行").bright_cyan());
             println!(
                 "{} {} {}",

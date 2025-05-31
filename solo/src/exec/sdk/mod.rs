@@ -15,6 +15,7 @@ use crate::config::definition::{MachineType, Server};
 
 mod aliyun;
 mod qcloud;
+mod rainyun;
 
 pub async fn execute_server_task<'a>(
     tx: Sender<ThreadStep>,
@@ -53,6 +54,9 @@ pub async fn execute_server_task<'a>(
             aliyun::ecs(txx, client, server, ipv4, ipv6).await
         }
         MachineType::AliyunSas => aliyun::sas(txx, client, server, ipv4).await,
+        MachineType::RainyunRcs => {
+            rainyun::rcs(txx, client, server, ipv4).await
+        }
     };
     match result {
         Ok(r) => r,

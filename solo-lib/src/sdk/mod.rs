@@ -16,3 +16,4 @@
 
 pub mod aliyun;
 pub mod qcloud;
+pub mod rainyun;

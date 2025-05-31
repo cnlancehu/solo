@@ -9,7 +9,12 @@ use walkdir::WalkDir;
 use super::definition::{
     Config, ConfigFile, MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID,
 };
-use crate::{cli::EXE_NAME, config::get_config_path};
+use crate::{
+    cli::EXE_NAME,
+    config::{
+        definition::MACHINE_TYPES_WITH_OPTIONAL_REGION_ID, get_config_path,
+    },
+};
 
 pub fn show_avaliable_configs() {
     let config_list = get_config_list();
@@ -100,6 +105,21 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
                         name = server.name
                     )
                     .bright_red()
+                );
+
+                exit(1);
+            }
+            if server.region.is_empty() {
+                if MACHINE_TYPES_WITH_OPTIONAL_REGION_ID
+                    .contains(&server.machine_type)
+                {
+                    continue;
+                }
+                println!("{}", t!("配置文件中存在错误").bright_red());
+                println!(
+                    "{}",
+                    t!("服务器 %{name} 的 region 不能为空", name = server.name)
+                        .bright_red()
                 );
 
                 exit(1);
