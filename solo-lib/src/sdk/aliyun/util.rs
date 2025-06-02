@@ -131,7 +131,7 @@ pub(super) fn request_builder(
             .map(|&header| format!(
                 "{}:{}",
                 header,
-                headers[header].to_str().unwrap()
+                headers[header].to_str().unwrap_or_default()
             ))
             .collect::<Vec<_>>()
             .join("\n"),
