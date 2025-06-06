@@ -28,6 +28,11 @@
 | 阿里云 | 云服务器 轻量应用服务器 |
 |  雨云  |        云服务器         |
 
+## 屏幕截图
+![运行](https://get.lance.fun/ops/solo/sc/1.png)
+
+![Windows 通知](https://get.lance.fun/ops/solo/sc/2.png)
+
 ## 参与贡献
 Solo 目前仍处于早期开发阶段，期待你的加入。
 
