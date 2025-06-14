@@ -10,6 +10,7 @@ use crate::{
     report::{ExecutionReportServer, ExecutionReportServerStatus},
 };
 
+/// SDK integration for Qcloud CVM.
 pub async fn cvm<'a>(
     tx: Sender<Cow<'a, str>>,
 
@@ -69,6 +70,7 @@ pub async fn cvm<'a>(
     }
 }
 
+/// SDK integration for Qcloud Lighthouse.
 pub async fn lighthouse<'a>(
     tx: Sender<Cow<'a, str>>,
 

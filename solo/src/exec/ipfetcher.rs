@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Copy)]
 #[serde(rename_all = "lowercase")]
+/// The IP protocol version the server uses.
 pub enum Protocol {
     #[serde(rename = "v4")]
     V4,

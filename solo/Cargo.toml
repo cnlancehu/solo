@@ -39,6 +39,7 @@ toml = "0.8.22"
 rand = "0.9.1"
 crossterm = "0.29.0"
 
+# Windows specific dependencies for system notifications
 [target.'cfg(windows)'.dependencies]
 tauri-winrt-notification = "0.7.2"
 opener = "0.7.2"

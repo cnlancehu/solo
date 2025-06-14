@@ -7,6 +7,7 @@ use solo_lib::SdkError;
 use unicode_width::UnicodeWidthStr;
 
 #[derive(Debug, Clone)]
+/// The execution report of a run of configurations.
 pub struct ExecutionReport<'a> {
     pub id: usize,
     pub config_name: Cow<'a, str>,

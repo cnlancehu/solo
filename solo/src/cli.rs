@@ -26,12 +26,12 @@ pub fn parse() -> Result<CliAction> {
     let args: Vec<String> = args().collect();
     let args_quantity = args.len();
 
-    // No arguments case
+    // Show help if no command is provided
     if args_quantity == 1 {
         return Ok(CliAction::ShowHelp);
     }
 
-    // Main command parsing
+    // Parse the first argument
     match args[1].as_str() {
         "version" | "help" => handle_simple_command(&args, args_quantity),
         "conf" => handle_conf_command(&args, args_quantity),
@@ -40,11 +40,11 @@ pub fn parse() -> Result<CliAction> {
     }
 }
 
+// Handle simple commands which do not require additional parameters
 fn handle_simple_command(
     args: &[String],
     args_quantity: usize,
 ) -> Result<CliAction> {
-    // Commands that don't accept extra arguments
     if args_quantity > 2 {
         print_error_info(
             &[2],
@@ -61,6 +61,7 @@ fn handle_simple_command(
     })
 }
 
+// Handle the `conf` command and its subcommands
 fn handle_conf_command(
     args: &[String],
     args_quantity: usize,
@@ -97,6 +98,7 @@ fn handle_conf_command(
     }
 }
 
+// Handle the `go` command
 fn handle_go_command(
     args: &[String],
     args_quantity: usize,
@@ -177,6 +179,7 @@ fn handle_go_command(
     }
 }
 
+// Handle unknown commands
 fn handle_unknown_command() -> Result<CliAction> {
     print_error_info(
         &[1],
@@ -189,6 +192,7 @@ fn handle_unknown_command() -> Result<CliAction> {
     Err(anyhow!("未知命令"))
 }
 
+/// Print error information with highlighted arguments and suggestions
 fn print_error_info(error_arg_nums: &[usize], error: &str, help: Option<&str>) {
     let args: Vec<String> = args().collect();
     let mut print_content = Vec::new();
@@ -254,6 +258,7 @@ fn print_error_info(error_arg_nums: &[usize], error: &str, help: Option<&str>) {
     }
 }
 
+// Show the main help message
 pub fn show_help() {
     let mut help: Vec<String> = Vec::new();
     help.push(format!(
@@ -303,6 +308,7 @@ pub fn show_help() {
     }
 }
 
+// Show the help message for the `conf` command
 pub fn show_conf_help() {
     let mut help: Vec<String> = Vec::new();
     help.push(format!(
@@ -324,6 +330,7 @@ pub fn show_conf_help() {
     }
 }
 
+// Helper function to format subcommand help lines
 fn help_print_subcommand(subcommand: &str, description: &str) -> String {
     let reserve_space = 16 - subcommand.width();
     format!(

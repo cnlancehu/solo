@@ -9,6 +9,7 @@ use crate::{
     report::{ExecutionReportServer, ExecutionReportServerStatus},
 };
 
+/// SDK integration for Rainyun RCS.
 pub async fn rcs<'a>(
     tx: Sender<Cow<'a, str>>,
 

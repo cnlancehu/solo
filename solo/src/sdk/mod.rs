@@ -17,6 +17,7 @@ mod aliyun;
 mod qcloud;
 mod rainyun;
 
+/// Execute a task for a single server.
 pub async fn execute_server_task<'a>(
     tx: Sender<ThreadStep>,
 

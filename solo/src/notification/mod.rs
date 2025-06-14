@@ -24,6 +24,7 @@ pub enum Status {
     Failed,
 }
 
+/// Send multiple notifications based on the execution report.
 pub async fn send_notification<'a>(
     notifications: &'a [Notification],
     report: ExecutionReport<'a>,

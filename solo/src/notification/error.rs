@@ -9,6 +9,7 @@ pub struct NotificationError<'a> {
 }
 
 #[must_use]
+/// Generates a user-friendly error message from a vector of `NotificationError`.
 pub fn explain_error(result: Vec<NotificationError<'_>>) -> Vec<String> {
     let mut error_message: Vec<String> = Vec::new();
     error_message.push(t!("通知发送失败").bright_red().to_string());

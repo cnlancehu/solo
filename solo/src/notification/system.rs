@@ -84,7 +84,7 @@ async fn send_child<'a>(
         })?;
     } else {
         let mut progress = Progress {
-            tag: generate_id(),
+            tag: generate_random_id(),
             title: t!("请在 %{time} 秒内操作", time = 30).to_string(),
             status: t!("倒计时").to_string(),
             value: 100.0,
@@ -156,7 +156,7 @@ async fn send_child<'a>(
     Ok(())
 }
 
-fn generate_id() -> String {
+fn generate_random_id() -> String {
     const CHARSET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let mut rng = rand::rng();
     (0..6)

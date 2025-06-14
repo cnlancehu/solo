@@ -10,6 +10,7 @@ use crate::{
     report::{ExecutionReportServer, ExecutionReportServerStatus},
 };
 
+/// SDK integration for Aliyun ECS.
 pub async fn ecs<'a>(
     tx: Sender<Cow<'a, str>>,
 
@@ -65,6 +66,7 @@ pub async fn ecs<'a>(
     }
 }
 
+/// SDK integration for Aliyun SAS.
 pub async fn sas<'a>(
     tx: Sender<Cow<'a, str>>,
 

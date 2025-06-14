@@ -66,7 +66,6 @@ async fn send_child(
         QmsgConfigMsgType::Private => format!("{endpoint}/jsend/{key}"),
     };
 
-    // 创建一个函数来处理错误转换，减少代码重复
     let handle_error = |e: reqwest::Error| -> Cow<'static, str> {
         t!("无法连接 | %{error}", error = e.to_string())
     };

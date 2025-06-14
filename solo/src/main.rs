@@ -45,10 +45,9 @@ async fn main() {
     }
 
     // Set locale
-    let locale = detect_locale_from_env().map_or_else(
-        || get_locale().unwrap_or_else(|| "en-US".to_string()),
-        |locale| locale,
-    );
+    let locale = env::var("SOLO_LANG").unwrap_or_else(|_| {
+        get_locale().unwrap_or_else(|| "en-US".to_string())
+    });
     set_locale(&locale);
 
     println!(
@@ -57,6 +56,7 @@ async fn main() {
         format!("v{}", env!("CARGO_PKG_VERSION")).bright_green()
     );
 
+    // Parse command line arguments
     let action = parse().unwrap_or_else(|_| process::exit(1));
 
     match action {
@@ -74,8 +74,4 @@ async fn main() {
         },
         ShowVersion => todo!(),
     }
-}
-
-fn detect_locale_from_env() -> Option<String> {
-    env::var("SOLO_LANG").ok()
 }
