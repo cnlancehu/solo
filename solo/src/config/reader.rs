@@ -10,10 +10,10 @@ use super::definition::{
     Config, ConfigFile, MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID,
 };
 use crate::{
-    cli::EXE_NAME,
     config::{
         definition::MACHINE_TYPES_WITH_OPTIONAL_REGION_ID, get_config_path,
     },
+    consts::EXE_NAME,
 };
 
 pub fn show_avaliable_configs() {

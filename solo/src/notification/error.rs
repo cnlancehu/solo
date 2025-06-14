@@ -8,6 +8,7 @@ pub struct NotificationError<'a> {
     pub error: Cow<'a, str>,
 }
 
+#[must_use]
 pub fn explain_error(result: Vec<NotificationError<'_>>) -> Vec<String> {
     let mut error_message: Vec<String> = Vec::new();
     error_message.push(t!("通知发送失败").bright_red().to_string());

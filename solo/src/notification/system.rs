@@ -15,8 +15,8 @@ use tokio::{fs, time::sleep};
 
 use super::{Status, error::NotificationError};
 use crate::{
-    EXE_DIR,
     config::definition::Notification,
+    consts::EXE_DIR,
     report::{ExecutionReport, show_full_report},
 };
 
@@ -25,7 +25,7 @@ pub async fn send<'a>(
     report: &ExecutionReport<'a>,
     status: &Arc<Status>,
 ) -> Option<NotificationError<'a>> {
-    send_child(report, &status)
+    send_child(report, status)
         .map_err(|e| NotificationError {
             name: Cow::Borrowed(&notification.name),
             error: e,

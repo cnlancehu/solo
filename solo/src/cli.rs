@@ -1,12 +1,11 @@
-use std::env::{args, current_exe};
+use std::env::args;
 
 use anyhow::{Result, anyhow};
 use cnxt::Colorize;
-use lazy_static::lazy_static;
 use rust_i18n::t;
 use unicode_width::UnicodeWidthStr;
 
-use crate::config::CONFIG_LIST_NAMES;
+use crate::{config::CONFIG_LIST_NAMES, consts::EXE_NAME};
 
 pub enum CliAction {
     RunConfig(Vec<String>),
@@ -21,17 +20,6 @@ pub enum ManageConfigAction {
     New,
     Del,
     Edit,
-}
-
-lazy_static! {
-    pub static ref EXE_NAME: String = {
-        current_exe()
-            .ok()
-            .and_then(|path| {
-                path.file_name().map(|n| n.to_string_lossy().into_owned())
-            })
-            .unwrap_or_else(|| "solo".into())
-    };
 }
 
 pub fn parse() -> Result<CliAction> {

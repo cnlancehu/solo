@@ -8,10 +8,8 @@
 )]
 
 use std::{
-    env::{self, current_exe},
-    fs,
-    path::{Path, PathBuf},
-    process,
+    env::{self},
+    fs, process,
 };
 
 use cli::{
@@ -22,7 +20,6 @@ use cnxt::Colorize as _;
 use config::{
     CONFIG_DETECTION_PATH, new::new_config, reader::show_avaliable_configs,
 };
-use lazy_static::lazy_static;
 use rust_i18n::set_locale;
 use sys_locale::get_locale;
 
@@ -30,18 +27,10 @@ mod cli;
 mod config;
 mod exec;
 
+pub mod consts;
 pub mod notification;
 pub mod report;
 pub mod sdk;
-
-lazy_static! {
-    pub static ref EXE_DIR: PathBuf = {
-        current_exe()
-            .ok()
-            .and_then(|path| path.parent().map(Path::to_path_buf))
-            .unwrap()
-    };
-}
 
 rust_i18n::i18n!("locales", fallback = ["en-US"]);
 
@@ -50,6 +39,7 @@ async fn main() {
     #[cfg(windows)]
     cnxt::control::set_virtual_terminal(true);
 
+    // Create configuration directory if it doesn't exist
     if !fs::exists(&*CONFIG_DETECTION_PATH).unwrap_or(false) {
         let _ = fs::create_dir_all(&*CONFIG_DETECTION_PATH);
     }

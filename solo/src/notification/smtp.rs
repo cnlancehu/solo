@@ -14,6 +14,7 @@ use crate::{
     report::{ExecutionReport, show_full_report},
 };
 
+#[must_use]
 pub fn send<'a>(
     notification: &'a Notification,
     report: &ExecutionReport<'a>,
@@ -21,7 +22,7 @@ pub fn send<'a>(
 ) -> Option<NotificationError<'a>> {
     let report = show_full_report(report, false, true);
 
-    send_child(notification, &report, &status)
+    send_child(notification, &report, status)
         .map_err(|e| NotificationError {
             name: Cow::Borrowed(&notification.name),
             error: e,

@@ -33,7 +33,7 @@ pub async fn send<'a>(
     report: &ExecutionReport<'a>,
     status: &Arc<Status>,
 ) -> Option<NotificationError<'a>> {
-    send_child(notification, report, &status)
+    send_child(notification, report, status)
         .map_err(|e| NotificationError {
             name: Cow::Borrowed(&notification.name),
             error: e,
@@ -42,9 +42,9 @@ pub async fn send<'a>(
         .err()
 }
 
-async fn send_child<'a>(
+async fn send_child(
     notification: &Notification,
-    report: &ExecutionReport<'a>,
+    report: &ExecutionReport<'_>,
     status: &Status,
 ) -> Result<(), Cow<'static, str>> {
     let NotificationMethod::Qmsg {

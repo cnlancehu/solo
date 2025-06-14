@@ -44,6 +44,7 @@ pub enum ExecutionReportServerStatus<'a> {
     },
 }
 
+#[must_use]
 pub fn show_brief_report(report: &ExecutionReport, color: bool) -> Vec<String> {
     let mut content: Vec<String> = Vec::new();
     if let ExecutionReportIpFetching::Failed { error } =
@@ -94,6 +95,7 @@ pub fn show_brief_report(report: &ExecutionReport, color: bool) -> Vec<String> {
     content
 }
 
+#[must_use]
 pub fn show_full_report(
     report: &ExecutionReport,
     color: bool,

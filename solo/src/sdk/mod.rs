@@ -35,7 +35,9 @@ pub async fn execute_server_task<'a>(
 
     thread::spawn(move || {
         while let Ok(message) = rxx.recv() {
-            (*step_msg_clone.lock().unwrap()).clone_from(&message);
+            if let Ok(mut step_msg) = step_msg_clone.lock() {
+                (*step_msg).clone_from(&message);
+            }
             let _ = tx_clone.blocking_send(ThreadStep {
                 name: Some(server_name_clone.clone()),
                 msg: message.clone(),
