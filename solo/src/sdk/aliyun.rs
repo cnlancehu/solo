@@ -7,7 +7,7 @@ use solo_lib::sdk::aliyun::Secret;
 
 use crate::{
     config::definition::Server,
-    exec::report::{ExecutionReportServer, ExecutionReportServerStatus},
+    report::{ExecutionReportServer, ExecutionReportServerStatus},
 };
 
 pub async fn ecs<'a>(

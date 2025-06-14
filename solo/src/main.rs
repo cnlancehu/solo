@@ -30,6 +30,10 @@ mod cli;
 mod config;
 mod exec;
 
+pub mod notification;
+pub mod report;
+pub mod sdk;
+
 lazy_static! {
     pub static ref EXE_DIR: PathBuf = {
         current_exe()

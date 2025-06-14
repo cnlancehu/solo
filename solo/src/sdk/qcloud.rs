@@ -7,7 +7,7 @@ use solo_lib::sdk::qcloud::Secret;
 
 use crate::{
     config::definition::Server,
-    exec::report::{ExecutionReportServer, ExecutionReportServerStatus},
+    report::{ExecutionReportServer, ExecutionReportServerStatus},
 };
 
 pub async fn cvm<'a>(

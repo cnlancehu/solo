@@ -9,7 +9,7 @@ use solo_lib::client;
 use super::{Status, error::NotificationError};
 use crate::{
     config::definition::{Notification, NotificationMethod, QmsgConfigMsgType},
-    exec::report::{ExecutionReport, show_full_report},
+    report::{ExecutionReport, show_full_report},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

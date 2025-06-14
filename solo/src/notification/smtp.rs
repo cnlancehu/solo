@@ -11,7 +11,7 @@ use rust_i18n::t;
 use super::{Status, error::NotificationError};
 use crate::{
     config::definition::{Notification, NotificationMethod, SmtpSecurity},
-    exec::report::{ExecutionReport, show_full_report},
+    report::{ExecutionReport, show_full_report},
 };
 
 pub fn send<'a>(

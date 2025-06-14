@@ -16,15 +16,15 @@ use tokio::{
 };
 use unicode_width::UnicodeWidthStr as _;
 
-use crate::config::{
-    definition::{Config, Schedule},
-    reader::process_config,
+use crate::{
+    config::{
+        definition::{Config, Schedule},
+        reader::process_config,
+    },
+    notification, report, sdk,
 };
 
 pub mod ipfetcher;
-pub mod notification;
-pub mod report;
-pub mod sdk;
 
 #[derive(Debug, Clone)]
 pub struct ThreadStep {

@@ -17,7 +17,7 @@ use super::{Status, error::NotificationError};
 use crate::{
     EXE_DIR,
     config::definition::Notification,
-    exec::report::{ExecutionReport, show_full_report},
+    report::{ExecutionReport, show_full_report},
 };
 
 pub async fn send<'a>(
@@ -46,13 +46,13 @@ async fn send_child<'a>(
     if is_success {
         let _ = fs::write(
             &icon_path,
-            include_bytes!("../../../../assets/circle-check.ico"),
+            include_bytes!("../../../assets/circle-check.ico"),
         )
         .await;
     } else {
         let _ = fs::write(
             &icon_path,
-            include_bytes!("../../../../assets/circle-xmark.ico"),
+            include_bytes!("../../../assets/circle-xmark.ico"),
         )
         .await;
     }

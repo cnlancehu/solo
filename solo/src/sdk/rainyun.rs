@@ -6,7 +6,7 @@ use rust_i18n::t;
 
 use crate::{
     config::definition::Server,
-    exec::report::{ExecutionReportServer, ExecutionReportServerStatus},
+    report::{ExecutionReportServer, ExecutionReportServerStatus},
 };
 
 pub async fn rcs<'a>(

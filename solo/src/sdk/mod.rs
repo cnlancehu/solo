@@ -7,11 +7,11 @@ use std::{
 use reqwest::Client;
 use tokio::sync::mpsc::Sender;
 
-use super::{
-    ThreadStep,
-    report::{ExecutionReportServer, ExecutionReportServerStatus},
+use super::report::{ExecutionReportServer, ExecutionReportServerStatus};
+use crate::{
+    config::definition::{MachineType, Server},
+    exec::ThreadStep,
 };
-use crate::config::definition::{MachineType, Server};
 
 mod aliyun;
 mod qcloud;
