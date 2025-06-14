@@ -1,7 +1,7 @@
 [package]
 name = "solo"
 description = "An port management app for cloud safety."
-version = "0.1.7"
+version = "0.1.8"
 edition = "2024"
 license = "Apache-2.0"
 authors = ["Lance <me@lance.fun>"]
@@ -42,4 +42,4 @@ crossterm = "0.29.0"
 # Windows specific dependencies for system notifications
 [target.'cfg(windows)'.dependencies]
 tauri-winrt-notification = "0.7.2"
-opener = "0.7.2"
+opener = "0.8.2"
