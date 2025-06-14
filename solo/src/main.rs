@@ -28,6 +28,7 @@ mod config;
 mod exec;
 
 pub mod consts;
+pub mod ipfetcher;
 pub mod notification;
 pub mod report;
 pub mod sdk;

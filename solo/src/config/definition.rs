@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use super::serde::deserialize_untagged_enum_case_insensitive;
-use crate::exec::ipfetcher::{IpProvider, Protocol};
+use crate::ipfetcher::{IpProvider, Protocol};
 
 pub const MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID: &[MachineType] =
     &[MachineType::RainyunRcs];
@@ -138,7 +138,7 @@ pub enum QmsgConfigMsgType {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::exec::ipfetcher::EmbedIpProvider;
+    use crate::ipfetcher::EmbedIpProvider;
 
     #[test]
     fn generate_example() {

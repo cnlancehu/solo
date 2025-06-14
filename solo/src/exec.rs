@@ -21,10 +21,8 @@ use crate::{
         definition::{Config, Schedule},
         reader::process_config,
     },
-    notification, report, sdk,
+    ipfetcher, notification, report, sdk,
 };
-
-pub mod ipfetcher;
 
 #[derive(Debug, Clone)]
 pub struct ThreadStep {

@@ -22,7 +22,7 @@ use super::definition::{Config, MachineType, Schedule, Server};
 use crate::{
     config::CONFIG_DETECTION_PATH,
     consts::EXE_NAME,
-    exec::ipfetcher::{EmbedIpProvider, IpProvider, Protocol},
+    ipfetcher::{EmbedIpProvider, IpProvider, Protocol},
 };
 
 const DISALLOWED_CHARS: [char; 33] = [
