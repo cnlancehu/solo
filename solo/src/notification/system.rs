@@ -57,15 +57,14 @@ async fn send_child<'a>(
         .await;
     }
     let title = if is_success {
-        t!("Solo: 运行成功")
+        t!("Solo: Execution successful")
     } else {
-        t!("Solo: 运行失败")
+        t!("Solo: Execution failed")
     };
-
     let text = match status {
-        Status::Failed => t!("点击以查看错误信息"),
-        Status::SuccessButNotChanged => t!("IP 相同"),
-        Status::SuccessFullyChanged => t!("IP 更改成功"),
+        Status::Failed => t!("Click to view error details"),
+        Status::SuccessButNotChanged => t!("IP unchanged"),
+        Status::SuccessFullyChanged => t!("IP changed successfully"),
     };
 
     let mut toast = Toast::new(Toast::POWERSHELL_APP_ID)
@@ -78,15 +77,19 @@ async fn send_child<'a>(
 
         toast.show().map_err(|e| -> Cow<'static, str> {
             Cow::Owned(
-                t!("无法发送系统通知 | %{error}", error = e.to_string())
-                    .to_string(),
+                t!(
+                    "Unable to send system notification | %{error}",
+                    error = e.to_string()
+                )
+                .to_string(),
             )
         })?;
     } else {
         let mut progress = Progress {
             tag: generate_random_id(),
-            title: t!("请在 %{time} 秒内操作", time = 30).to_string(),
-            status: t!("倒计时").to_string(),
+            title: t!("Please act within %{time} seconds", time = 30)
+                .to_string(),
+            status: t!("Countdown").to_string(),
             value: 100.0,
             value_string: "30s".to_string(),
         };
@@ -97,8 +100,8 @@ async fn send_child<'a>(
         let report = show_full_report(report, false, true).join("\n");
         toast = toast
             .duration(Duration::Long)
-            .add_button(&t!("查看错误信息"), "1")
-            .add_button(&t!("取消"), "2")
+            .add_button(&t!("View error details"), "1")
+            .add_button(&t!("Cancel"), "2")
             .on_activated({
                 move |action| {
                     // Process the action, or execute the same logic if action is None
@@ -117,8 +120,11 @@ async fn send_child<'a>(
 
         toast.show().map_err(|e| -> Cow<'static, str> {
             Cow::Owned(
-                t!("无法发送系统通知 | %{error}", error = e.to_string())
-                    .to_string(),
+                t!(
+                    "Unable to send system notification | %{error}",
+                    error = e.to_string()
+                )
+                .to_string(),
             )
         })?;
 
@@ -130,20 +136,22 @@ async fn send_child<'a>(
             if i == 0 {
                 progress.value = 0.0;
                 progress.value_string = String::new();
-                progress.title = t!("已超时", time = i).to_string();
+                progress.title = t!("Timed out", time = i).to_string();
                 progress.status =
-                    t!("请手动运行 Solo 来查看错误信息").to_string();
+                    t!("Please manually run Solo to view error details")
+                        .to_string();
             } else {
                 progress.value = i as f32 / 30.0;
                 progress.value_string = format!("{i}s");
                 progress.title =
-                    t!("请在 %{time} 秒内操作", time = i).to_string();
+                    t!("Please act within %{time} seconds", time = i)
+                        .to_string();
             }
             toast.set_progress(&progress).map_err(
                 |e| -> Cow<'static, str> {
                     Cow::Owned(
                         t!(
-                            "无法发送系统通知 | %{error}",
+                            "Unable to send system notification | %{error}",
                             error = e.to_string()
                         )
                         .to_string(),

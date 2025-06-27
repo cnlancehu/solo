@@ -49,13 +49,16 @@ fn send_child(
     };
 
     let handle_error = |e: smtp::Error| -> Cow<'static, str> {
-        t!("无法连接至邮箱 | %{error}", error = e.to_string())
+        t!(
+            "Unable to connect to email server | %{error}",
+            error = e.to_string()
+        )
     };
 
     let subject = if status == &Status::Failed {
-        t!("Solo: 运行失败")
+        t!("Solo: Execution failed")
     } else {
-        t!("Solo: 运行成功")
+        t!("Solo: Execution successful")
     };
 
     let email = Message::builder()
@@ -63,12 +66,15 @@ fn send_child(
         .user_agent("Solo".to_string())
         .header(ContentType::TEXT_PLAIN)
         .date_now()
-        .from(from.parse().map_err(|_| t!("发信人地址填写错误"))?)
-        .to(to.parse().map_err(|_| t!("收信人地址填写错误"))?)
+        .from(
+            from.parse()
+                .map_err(|_| "Sender address is incorrect".to_string())?,
+        )
+        .to(to
+            .parse()
+            .map_err(|_| "Recipient address is incorrect".to_string())?)
         .body(report.join("\n"))
-        .map_err(|e| {
-            t!("邮件构建填写错误 | %{error}", error = e.to_string())
-        })?;
+        .map_err(|e| format!("Error constructing email | {}", e.to_string()))?;
 
     let creds = Credentials::new(username.clone(), password.clone());
 
@@ -91,7 +97,7 @@ fn send_child(
 
     mailer
         .send(&email)
-        .map_err(|e| t!("邮件发送失败 | %{error}", error = e.to_string()))?;
+        .map_err(|e| format!("Failed to send email | {}", e.to_string()))?;
 
     Ok(())
 }

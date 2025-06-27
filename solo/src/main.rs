@@ -33,7 +33,7 @@ pub mod notification;
 pub mod report;
 pub mod sdk;
 
-rust_i18n::i18n!("locales", fallback = ["en-US"]);
+rust_i18n::i18n!("locales", fallback = ["en"]);
 
 #[tokio::main]
 async fn main() {
@@ -46,9 +46,8 @@ async fn main() {
     }
 
     // Set locale
-    let locale = env::var("SOLO_LANG").unwrap_or_else(|_| {
-        get_locale().unwrap_or_else(|| "en-US".to_string())
-    });
+    let locale = env::var("SOLO_LANG")
+        .unwrap_or_else(|_| get_locale().unwrap_or_else(|| "en".to_string()));
     set_locale(&locale);
 
     println!(

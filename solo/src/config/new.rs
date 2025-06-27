@@ -40,7 +40,7 @@ enum InputResult {
 }
 
 pub fn new_config() -> Result<()> {
-    println!("{}", t!("新建配置文件").bright_magenta());
+    println!("{}", t!("Create Config File").bright_magenta());
 
     match get_config_filename()? {
         InputResult::Value(filename) => {
@@ -48,20 +48,20 @@ pub fn new_config() -> Result<()> {
             let config_path = CONFIG_DETECTION_PATH.join(&filename);
 
             if config_path.exists() {
-                println!("{}", t!("文件已存在").bright_red());
+                println!("{}", t!("File already exists").bright_red());
                 return Ok(());
             }
             fs::write(&config_path, config).inspect_err(|_| {
-                println!("{}", t!("无法创建配置文件").bright_red());
+                println!("{}", t!("Unable to create config file").bright_red());
             })?;
             println!(
                 "{}\n{} {}",
-                t!("配置文件已创建").bright_green(),
-                t!("位于").bright_cyan(),
+                t!("Config file created").bright_green(),
+                t!("Located at").bright_cyan(),
                 config_path.display().to_string().bright_yellow()
             );
             println!();
-            println!("{}", t!("编辑它，然后使用以下命令运行").bright_blue());
+            println!("{}", t!("Edit it, then run with the following command").bright_blue());
             println!(
                 "{} {} {}",
                 EXE_NAME.bright_cyan(),
@@ -70,7 +70,7 @@ pub fn new_config() -> Result<()> {
             );
         }
         InputResult::Cancelled => {
-            println!("{}", t!("操作已取消").bright_red());
+            println!("{}", t!("Operation cancelled").bright_red());
         }
     }
 
@@ -82,10 +82,10 @@ fn get_config_filename() -> Result<InputResult> {
     let mut stdout = stdout();
     execute!(stdout, SetCursorStyle::BlinkingBar, Hide)?;
 
-    let raw_prompt = format!("{} {} ", t!("输入配置文件名"), ">");
+    let raw_prompt = format!("{} {} ", t!("Enter config file name"), ">");
     let prompt = format!(
         "{} {} ",
-        t!("输入配置文件名").bright_cyan(),
+        t!("Enter config file name").bright_cyan(),
         ">".bright_green()
     );
     let termsize = terminal::size().map_or(80, |size| size.0);
@@ -230,18 +230,18 @@ fn cleanup_terminal(stdout: &mut io::Stdout) -> Result<()> {
 
 fn generate_example_config() -> String {
     let config = Config {
-        name: t!("配置文件名称").to_string(),
+        name: t!("Config Name").to_string(),
         servers: vec![Server {
-            name: t!("服务器名称").to_string(),
+            name: t!("Server Name").to_string(),
             machine_type: MachineType::AliyunEcs,
-            machine_id: t!("服务器实例ID").to_string(),
-            region: t!("服务器地域").to_string(),
-            secret_id: t!("密钥ID").to_string(),
-            secret_key: t!("密钥Key").to_string(),
+            machine_id: t!("Server Instance ID").to_string(),
+            region: t!("Server Region").to_string(),
+            secret_id: t!("Secret ID").to_string(),
+            secret_key: t!("Secret Key").to_string(),
             protocol: Protocol::V4,
             rules: vec![
-                t!("第一条规则").to_string(),
-                t!("第二条规则").to_string(),
+                t!("First Rule").to_string(),
+                t!("Second Rule").to_string(),
             ],
         }],
         schedule: Schedule::Once,

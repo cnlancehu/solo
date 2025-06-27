@@ -38,14 +38,14 @@ pub async fn cvm<'a>(
         secret_id: server.secret_id,
         secret_key: server.secret_key,
     };
-    send(t!("获取防火墙规则"));
+    send(t!("Fetching firewall rules"));
     let response = list_rules(client, &security_group, &secret).await?;
     let security_group_policy_set =
         response.response.data.security_group_policy_set;
     let (security_group_policy_set, require_update) =
         compare_rules(&security_group_policy_set, &ipv4, &ipv6, &server.rules);
     if require_update {
-        send(t!("修改防火墙规则"));
+        send(t!("Modifying firewall rules"));
         modify_rules(
             client,
             &security_group,
@@ -97,13 +97,13 @@ pub async fn lighthouse<'a>(
         secret_id: server.secret_id,
         secret_key: server.secret_key,
     };
-    send(t!("获取防火墙规则"));
+    send(t!("Fetching firewall rules"));
     let response = list_rules(client, &instance, &secret).await?;
     let firewall_rules = &response.response.data.firewall_rule_set;
     let (firewall_rules, require_update) =
         compare_rules(firewall_rules, &ipv4, &server.rules);
     if require_update {
-        send(t!("修改防火墙规则"));
+        send(t!("Modifying firewall rules"));
         modify_rules(client, &instance, &secret, &firewall_rules).await?;
 
         Ok(ExecutionReportServer {

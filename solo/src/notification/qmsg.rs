@@ -67,13 +67,17 @@ async fn send_child(
     };
 
     let handle_error = |e: reqwest::Error| -> Cow<'static, str> {
-        t!("无法连接 | %{error}", error = e.to_string())
+        t!("Unable to connect | %{error}", error = e.to_string())
     };
 
     let subject = match status {
-        Status::Failed => t!("Solo: 运行失败"),
-        Status::SuccessButNotChanged => t!("Solo: 运行成功 | IP 相同"),
-        Status::SuccessFullyChanged => t!("Solo: 运行成功 | IP 更改成功"),
+        Status::Failed => t!("Solo: Execution failed"),
+        Status::SuccessButNotChanged => {
+            t!("Solo: Execution successful | IP unchanged")
+        }
+        Status::SuccessFullyChanged => {
+            t!("Solo: Execution successful | IP changed successfully")
+        }
     };
 
     let request = QmsgRequest {
@@ -91,10 +95,13 @@ async fn send_child(
     let response = response.text().await.map_err(handle_error)?;
     let response: QmsgResponse =
         serde_json::from_str(&response).map_err(|e| {
-            t!("解析返回数据错误 | %{error}", error = e.to_string())
+            t!(
+                "Parse response data error | %{error}",
+                error = e.to_string()
+            )
         })?;
     if !response.success {
-        return Err(t!("发送失败 | %{reason}", reason = response.reason));
+        return Err(t!("Send failed | %{reason}", reason = response.reason));
     }
 
     Ok(())

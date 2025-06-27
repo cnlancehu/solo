@@ -1,0 +1,283 @@
+Adding firewall rules:
+  en: Adding firewall rules
+  zh-CN: 添加防火墙规则
+An error occurred while sending a request to the cloud provider:
+  en: An error occurred while sending a request to the cloud provider
+  zh-CN: 向云提供商发送请求时发生错误
+"Available commands:":
+  en: "Available commands:"
+  zh-CN: "可用命令:"
+"Available configurations:":
+  en: "Available configurations:"
+  zh-CN: "可用的配置文件:"
+Cancel:
+  en: Cancel
+  zh-CN: 取消
+Click to view error details:
+  en: Click to view error details
+  zh-CN: 点击查看错误详情
+Command line argument error:
+  en: Command line argument error
+  zh-CN: 命令行参数错误
+Config Name:
+  en: Config Name
+  zh-CN: 配置名称
+Config file created:
+  en: Config file created
+  zh-CN: 配置文件已创建
+Configuration file:
+  en: Configuration file
+  zh-CN: 配置文件
+Configuration file contains errors:
+  en: Configuration file contains errors
+  zh-CN: 配置文件中存在错误
+Content parsing error:
+  en: Content parsing error
+  zh-CN: 无法解析内容
+Countdown:
+  en: Countdown
+  zh-CN: 倒计时
+Create Config File:
+  en: Create Config File
+  zh-CN: 创建配置文件
+Create a new configuration:
+  en: Create a new configuration
+  zh-CN: 创建新的配置文件
+Deleting firewall rules:
+  en: Deleting firewall rules
+  zh-CN: 删除防火墙规则
+Duplicate configuration names detected:
+  en: Duplicate configuration names detected
+  zh-CN: 检测到重复的配置名称
+Edit it, then run with the following command:
+  en: Edit it, then run with the following command
+  zh-CN: 编辑它，然后通过以下命令运行
+Enter config file name:
+  en: Enter config file name
+  zh-CN: 输入配置文件名称
+Error Code:
+  en: Error Code
+  zh-CN: 错误代码
+Error Message:
+  en: Error Message
+  zh-CN: 错误信息
+Error occurred at %{when}:
+  en: Error occurred at %{when}
+  zh-CN: 在 %{when} 时出错
+Examples:
+  en: Examples
+  zh-CN: 示例
+Executed at:
+  en: Executed at
+  zh-CN: 运行于
+Execution completed:
+  en: Execution completed
+  zh-CN: 运行完成
+Execution failed:
+  en: Execution failed
+  zh-CN: 运行失败
+Failed to fetch IP:
+  en: Failed to fetch IP
+  zh-CN: 无法获取 IP 地址
+Fetching IP address:
+  en: Fetching IP address
+  zh-CN: 获取 IP 地址
+Fetching firewall rules:
+  en: Fetching firewall rules
+  zh-CN: 获取防火墙规则
+File already exists:
+  en: File already exists
+  zh-CN: 文件已存在
+First Rule:
+  en: First Rule
+  zh-CN: 第一条规则
+Help:
+  en: Help
+  zh-CN: 帮助
+IP Address:
+  en: IP Address
+  zh-CN: IP 地址
+IP changed successfully:
+  en: IP changed successfully
+  zh-CN: IP 更改成功
+IP unchanged:
+  en: IP unchanged
+  zh-CN: IP 相同
+List available configurations:
+  en: List available configurations
+  zh-CN: 列出的可用配置文件
+Located at:
+  en: Located at
+  zh-CN: 位于
+Manage configuration files:
+  en: Manage configuration files
+  zh-CN: 管理配置文件
+Missing configuration name:
+  en: Missing configuration name
+  zh-CN: 缺少配置名称
+Modifying firewall rules:
+  en: Modifying firewall rules
+  zh-CN: 修改防火墙规则
+Network request error:
+  en: Network request error
+  zh-CN: 网络请求错误
+No configuration files available:
+  en: No configuration files available
+  zh-CN: 没有可用的配置文件
+No configuration found:
+  en: No configuration found
+  zh-CN: 未找到配置
+Notification sending failed:
+  en: Notification sending failed
+  zh-CN: 通知发送失败
+Online documentation %{url}:
+  en: Online documentation %{url}
+  zh-CN: 在线文档 %{url}
+Operation cancelled:
+  en: Operation cancelled
+  zh-CN: 操作已取消
+Parse response data error | %{error}:
+  en: Parse response data error | %{error}
+  zh-CN: 解析响应数据错误 | %{error}
+Please act within %{time} seconds:
+  en: Please act within %{time} seconds
+  zh-CN: 请在 %{time} 秒内操作
+Please check if the configuration name is correct:
+  en: Please check if the configuration name is correct
+  zh-CN: 请检查配置名称是否正确
+Please manually run Solo to view error details:
+  en: Please manually run Solo to view error details
+  zh-CN: 请手动运行 Solo 以查看错误详情
+Please provide the configuration name to run:
+  en: Please provide the configuration name to run
+  zh-CN: 请提供要运行的配置名称
+Please remove duplicate configuration names:
+  en: Please remove duplicate configuration names
+  zh-CN: 请移除重复的配置名称
+Remove extra parameters and try again:
+  en: Remove extra parameters and try again
+  zh-CN: 删除多余参数，然后重试
+Remove them and try again:
+  en: Remove them and try again
+  zh-CN: 删除它，然后重试
+Request ID:
+  en: Request ID
+  zh-CN: 请求 ID
+Run %{cmd} to create one:
+  en: Run %{cmd} to create one
+  zh-CN: 运行 %{cmd} 创建一个
+Run %{cmd} to view available configuration list:
+  en: Run %{cmd} to view available configuration list
+  zh-CN: 运行 %{cmd} 以查看可用的配置文件
+Run configuration named `solo-config`:
+  en: Run configuration named `solo-config`
+  zh-CN: 运行名为 `solo-config` 的配置
+Run specified configuration:
+  en: Run specified configuration
+  zh-CN: 运行指定配置
+Running multiple configurations, Solo will not output detailed runtime information:
+  en: Running multiple configurations, Solo will not output detailed runtime information
+  zh-CN: 运行多个配置时，Solo 不会输出详细的运行时信息
+Second Rule:
+  en: Second Rule
+  zh-CN: 第二条规则
+Secret ID:
+  en: Secret ID
+  zh-CN: 密钥 ID
+Secret Key:
+  en: Secret Key
+  zh-CN: 密钥 Key
+Send failed | %{reason}:
+  en: Send failed | %{reason}
+  zh-CN: 发送失败 | %{reason}
+Server %{name}'s region cannot be empty:
+  en: Server %{name}'s region cannot be empty
+  zh-CN: 服务器 %{name} 的地域不能为空
+Server %{name}'s secret_id cannot be empty:
+  en: Server %{name}'s secret_id cannot be empty
+  zh-CN: 服务器 %{name} 的 secret_id 不能为空
+Server Instance ID:
+  en: Server Instance ID
+  zh-CN: 服务器实例 ID
+Server Name:
+  en: Server Name
+  zh-CN: 服务器名称
+Server Region:
+  en: Server Region
+  zh-CN: 服务器地域
+Show this help message:
+  en: Show this help message
+  zh-CN: 显示此帮助信息
+Show version information:
+  en: Show version information
+  zh-CN: 显示版本信息
+"Solo: Execution failed":
+  en: "Solo: Execution failed"
+  zh-CN: "Solo: 执行失败"
+"Solo: Execution successful":
+  en: "Solo: Execution successful"
+  zh-CN: "Solo: 执行成功"
+"Solo: Execution successful | IP changed successfully":
+  en: "Solo: Execution successful | IP changed successfully"
+  zh-CN: "Solo: 执行成功 | IP 更改成功"
+"Solo: Execution successful | IP unchanged":
+  en: "Solo: Execution successful | IP unchanged"
+  zh-CN: "Solo: 执行成功 | IP 相同"
+Specified configuration not found:
+  en: Specified configuration not found
+  zh-CN: 未找到指定配置
+This command does not support additional parameters:
+  en: This command does not support additional parameters
+  zh-CN: 此命令不支持额外参数
+This command does not support more parameters:
+  en: This command does not support more parameters
+  zh-CN: 此命令不支持更多参数
+This is not a valid command:
+  en: This is not a valid command
+  zh-CN: 这不是一个有效的命令
+Timed out:
+  en: Timed out
+  zh-CN: 超时
+Type %{cmd} for help:
+  en: Type %{cmd} for help
+  zh-CN: 输入 %{cmd} 查看帮助
+Unable to connect to email server | %{error}:
+  en: Unable to connect to email server | %{error}
+  zh-CN: 无法连接到邮件服务器 | %{error}
+Unable to connect | %{error}:
+  en: Unable to connect | %{error}
+  zh-CN: 无法连接 | %{error}
+Unable to create config file:
+  en: Unable to create config file
+  zh-CN: 无法创建配置文件
+Unable to read configuration file:
+  en: Unable to read configuration file
+  zh-CN: 无法读取配置文件
+Unable to send system notification | %{error}:
+  en: Unable to send system notification | %{error}
+  zh-CN: 无法发送系统通知 | %{error}
+Unknown configuration command:
+  en: Unknown configuration command
+  zh-CN: 未知的配置命令
+Unknown error:
+  en: Unknown error
+  zh-CN: 未知错误
+"Usage:":
+  en: "Usage:"
+  zh-CN: "用法:"
+View error details:
+  en: View error details
+  zh-CN: 查看错误详情
+Waiting for the next execution:
+  en: Waiting for the next execution
+  zh-CN: 等待下一次执行
+"[arguments]":
+  en: "[arguments]"
+  zh-CN: "[参数]"
+"[command]":
+  en: "[command]"
+  zh-CN: "[命令]"
+_version: 2
+config_name:
+  en: config_name
+  zh-CN: 配置名称

@@ -38,16 +38,16 @@ pub async fn ecs<'a>(
         secret_id: server.secret_id,
         secret_key: server.secret_key,
     };
-    send(t!("获取防火墙规则"));
+    send(t!("Fetching firewall rules"));
     let response = list_rules(client, &security_group, &secret).await?;
     let security_group_rules = &response.response.permissions.permission;
     let (firewall_rules, require_update) =
         compare_rules(security_group_rules, &ipv4, &ipv6, &server.rules);
     if require_update {
-        send(t!("删除防火墙规则"));
+        send(t!("Deleting firewall rules"));
         delete_rules(client, &security_group, &secret, &firewall_rules).await?;
 
-        send(t!("添加防火墙规则"));
+        send(t!("Adding firewall rules"));
         create_rules(client, &security_group, &secret, &firewall_rules).await?;
 
         Ok(ExecutionReportServer {
@@ -93,16 +93,16 @@ pub async fn sas<'a>(
         secret_id: server.secret_id,
         secret_key: server.secret_key,
     };
-    send(t!("获取防火墙规则"));
+    send(t!("Fetching firewall rules"));
     let response = list_rules(client, &instance, &secret).await?;
     let firewall_rules = response.response.firewall_rules;
     let (firewall_rules, require_update) =
         compare_rules(&firewall_rules, &ipv4, &server.rules);
     if require_update {
-        send(t!("删除防火墙规则"));
+        send(t!("Deleting firewall rules"));
         delete_rules(client, &instance, &secret, &firewall_rules).await?;
 
-        send(t!("添加防火墙规则"));
+        send(t!("Adding firewall rules"));
         create_rules(client, &instance, &secret, &firewall_rules).await?;
 
         Ok(ExecutionReportServer {

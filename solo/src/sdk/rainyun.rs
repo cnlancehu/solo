@@ -29,13 +29,13 @@ pub async fn rcs<'a>(
 
     let instance_id = server.machine_id;
     let token = server.secret_key;
-    send(t!("获取防火墙规则"));
+    send(t!("Fetching firewall rules"));
     let response = list_rules(client, &instance_id, &token).await?;
     let records = response.data.records;
     let (records, require_update) =
         compare_rules(&records, &ipv4, &server.rules);
     if require_update {
-        send(t!("修改防火墙规则"));
+        send(t!("Modifying firewall rules"));
         modify_rules(client, &instance_id, &token, &records).await?;
 
         Ok(ExecutionReportServer {

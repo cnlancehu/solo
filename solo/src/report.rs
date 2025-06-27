@@ -53,7 +53,7 @@ pub fn show_brief_report(report: &ExecutionReport, color: bool) -> Vec<String> {
     {
         content.push(format!(
             "{} | {}",
-            t!("获取 IP 失败").bright_red_if(color),
+            t!("Failed to fetch IP").bright_red_if(color),
             explain_error(error, color).join("\n")
         ));
     }
@@ -65,13 +65,13 @@ pub fn show_brief_report(report: &ExecutionReport, color: bool) -> Vec<String> {
                     content.push(format!(
                         "[{}] {}",
                         server_status.name.bright_green_if(color),
-                        t!("IP 更改成功").bright_green_if(color)
+                        t!("IP changed successfully").bright_green_if(color)
                     ));
                 } else {
                     content.push(format!(
                         "[{}] {}",
                         server_status.name.bright_green_if(color),
-                        t!("IP 相同").bright_green_if(color)
+                        t!("IP unchanged").bright_green_if(color)
                     ));
                 }
             }
@@ -80,7 +80,7 @@ pub fn show_brief_report(report: &ExecutionReport, color: bool) -> Vec<String> {
                 content.push(format!(
                     "[{}] | {}",
                     server_status.name.bright_red_if(color),
-                    t!("在 %{when} 时出错", when = when).bright_red_if(color)
+                    t!("Error occurred at %{when}", when = when).bright_red_if(color)
                 ));
                 for line in explain_error(&error, true) {
                     content.push(format!(
@@ -105,12 +105,12 @@ pub fn show_full_report(
     let mut content: Vec<String> = Vec::new();
     content.push(format!(
         "{} | {}",
-        t!("配置文件").bright_green_if(color),
+        t!("Configuration file").bright_green_if(color),
         report.config_name.bright_green_if(color)
     ));
     content.push(format!(
         "{} | {}",
-        t!("运行于").bright_green_if(color),
+        t!("Executed at").bright_green_if(color),
         chrono::DateTime::from_timestamp(report.finished_timestamp, 0)
             .map_or_else(
                 || report.finished_timestamp.to_string(),
@@ -123,7 +123,7 @@ pub fn show_full_report(
             ExecutionReportIpFetching::Success { ipv4, ipv6 } => {
                 content.push(format!(
                     "{} | {}",
-                    t!("IP 地址").bright_green_if(color),
+                    t!("IP Address").bright_green_if(color),
                     vec![ipv4.as_ref(), ipv6.as_ref()]
                         .into_iter()
                         .filter(|s| !s.is_empty())
@@ -135,7 +135,7 @@ pub fn show_full_report(
             ExecutionReportIpFetching::Failed { error } => {
                 content.push(format!(
                     "{} | {}",
-                    t!("获取 IP 失败").bright_red_if(color),
+                    t!("Failed to fetch IP").bright_red_if(color),
                     explain_error(error, color).join("\n")
                 ));
             }
@@ -149,13 +149,13 @@ pub fn show_full_report(
                     content.push(format!(
                         "[{}] {}",
                         server_status.name.bright_green_if(color),
-                        t!("IP 更改成功").bright_green_if(color)
+                        t!("IP changed successfully").bright_green_if(color)
                     ));
                 } else {
                     content.push(format!(
                         "[{}] {}",
                         server_status.name.bright_green_if(color),
-                        t!("IP 相同").bright_green_if(color)
+                        t!("IP unchanged").bright_green_if(color)
                     ));
                 }
             }
@@ -164,7 +164,7 @@ pub fn show_full_report(
                 content.push(format!(
                     "[{}] | {}",
                     server_status.name.bright_red_if(color),
-                    t!("运行失败").bright_red_if(color)
+                    t!("Execution failed").bright_red_if(color)
                 ));
                 for line in explain_error(&error, color) {
                     content.push(format!(
@@ -186,7 +186,7 @@ fn explain_error(error: &Error, color: bool) -> Vec<String> {
     } else if let Some(reqwest_error) = error.downcast_ref::<reqwest::Error>() {
         vec![format!(
             "{} | {}",
-            t!("网络请求错误"),
+            t!("Network request error"),
             reqwest_error.to_string().bright_red_if(color)
         )]
     } else if let Some(serde_json_error) =
@@ -194,13 +194,13 @@ fn explain_error(error: &Error, color: bool) -> Vec<String> {
     {
         vec![format!(
             "{} | {}",
-            t!("内容解析错误"),
+            t!("Content parsing error"),
             serde_json_error.to_string().bright_red_if(color)
         )]
     } else {
         vec![format!(
             "{} | {}",
-            t!("未知错误"),
+            t!("Unknown error"),
             error.to_string().bright_red_if(color)
         )]
     }
@@ -208,9 +208,9 @@ fn explain_error(error: &Error, color: bool) -> Vec<String> {
 
 fn explain_sdkerror(error: &SdkError, color: bool) -> Vec<String> {
     let indent_width = [
-        t!("请求 ID").width(),
-        t!("错误代码").width(),
-        t!("错误信息").width(),
+        t!("Request ID").width(),
+        t!("Error Code").width(),
+        t!("Error Message").width(),
     ]
     .iter()
     .max()
@@ -218,18 +218,18 @@ fn explain_sdkerror(error: &SdkError, color: bool) -> Vec<String> {
         + 2;
     let mut error_message: Vec<String> = Vec::new();
     error_message.push(
-        t!("在向云服务商发送请求时发生错误")
+        t!("An error occurred while sending a request to the cloud provider")
             .bright_red_if(color)
             .to_string(),
     );
     error_message.push(format!(
         "{} | {}",
-        calc_indent_content(&t!("请求 ID"), indent_width),
+        calc_indent_content(&t!("Request ID"), indent_width),
         error.request_id.bright_red_if(color),
     ));
     error_message.push(format!(
         "{} | {}",
-        calc_indent_content(&t!("错误代码"), indent_width),
+        calc_indent_content(&t!("Error Code"), indent_width),
         error.code.bright_red_if(color),
     ));
     {
@@ -237,7 +237,7 @@ fn explain_sdkerror(error: &SdkError, color: bool) -> Vec<String> {
         if let Some(first_line) = lines.first() {
             error_message.push(format!(
                 "{} | {}",
-                calc_indent_content(&t!("错误信息"), indent_width),
+                calc_indent_content(&t!("Error Message"), indent_width),
                 first_line.bright_red_if(color),
             ));
             for line in lines.iter().skip(1) {

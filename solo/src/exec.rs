@@ -36,7 +36,7 @@ pub async fn run(config_args: Vec<String>) {
     if config_num > 1 {
         println!(
             "{}",
-            t!("正在运行多个配置，Solo 不会输出详细的运行信息").bright_yellow()
+            t!("Running multiple configurations, Solo will not output detailed runtime information").bright_yellow()
         );
     }
     let (tx, mut rx) = mpsc::channel(100);
@@ -95,13 +95,13 @@ pub async fn run(config_args: Vec<String>) {
                         if config_num == 1 {
                             println!(
                                 "{}",
-                                t!("执行完成").bright_green()
+                                t!("Execution completed").bright_green()
                             );
                         } else {
                             println!(
                                 "{:<max_config_name_length$} | {}",
                                 id_config_name.get(&report.id).map_or("", |v| v).bright_yellow(),
-                                t!("执行完成").bright_green()
+                                t!("Execution completed").bright_green()
                             );
                         }
                         active_tasks -= 1;
@@ -118,13 +118,13 @@ pub async fn run(config_args: Vec<String>) {
                         if config_num == 1 {
                             println!(
                                 "{}",
-                                t!("等待下一次执行").bright_yellow()
+                                t!("Waiting for the next execution").bright_yellow()
                             );
                         } else {
                             println!(
                                 "{:<max_config_name_length$} | {}",
                                 id_config_name.get(&report.id).map_or("", |v| v).bright_yellow(),
-                                t!("等待下一次执行").bright_yellow()
+                                t!("Waiting for the next execution").bright_yellow()
                             );
                         }
 
@@ -175,7 +175,7 @@ fn execute_task<'a>(
     tokio::spawn(async move {
         tokio::time::sleep(Duration::from_secs(sleep_interval as u64)).await;
 
-        send(None, t!("获取 IP 地址"));
+        send(None, t!("Fetching IP address"));
         let protocol = if config
             .servers
             .iter()

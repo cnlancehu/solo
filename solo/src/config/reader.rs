@@ -19,11 +19,11 @@ use crate::{
 pub fn show_avaliable_configs() {
     let config_list = get_config_list();
     if config_list.is_empty() {
-        println!("{}", t!("没有找到任何配置").bright_red());
+        println!("{}", t!("No configuration found").bright_red());
         println!(
             "{}",
             t!(
-                "运行 %{cmd} 创建一个",
+                "Run %{cmd} to create one",
                 cmd = format!("`{} conf new`", *EXE_NAME)
             )
             .bright_red()
@@ -31,7 +31,7 @@ pub fn show_avaliable_configs() {
         return;
     }
 
-    println!("{}", t!("可用配置:").bright_green());
+    println!("{}", t!("Available configurations:").bright_green());
     for f in &config_list {
         println!(
             "  {} {}",
@@ -73,7 +73,7 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
         let path = get_config_path(&name).ok_or_else(|| anyhow!(""))?;
         let filename = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
         let str = fs::read_to_string(&path).unwrap_or_else(|e| {
-            println!("{}", t!("无法读取配置文件").bright_red());
+            println!("{}", t!("Unable to read configuration file").bright_red());
             println!("{e}");
             exit(1);
         });
@@ -97,11 +97,11 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
                 {
                     continue;
                 }
-                println!("{}", t!("配置文件中存在错误").bright_red());
+                println!("{}", t!("Configuration file contains errors").bright_red());
                 println!(
                     "{}",
                     t!(
-                        "服务器 %{name} 的 secret_id 不能为空",
+                        "Server %{name}'s secret_id cannot be empty",
                         name = server.name
                     )
                     .bright_red()
@@ -115,10 +115,10 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
                 {
                     continue;
                 }
-                println!("{}", t!("配置文件中存在错误").bright_red());
+                println!("{}", t!("Configuration file contains errors").bright_red());
                 println!(
                     "{}",
-                    t!("服务器 %{name} 的 region 不能为空", name = server.name)
+                    t!("Server %{name}'s region cannot be empty", name = server.name)
                         .bright_red()
                 );
 
@@ -146,7 +146,7 @@ fn print_config_error(
     message: &str,
     help: Option<Cow<'static, str>>,
 ) {
-    println!("{}", t!("配置文件中存在错误").bright_red());
+    println!("{}", t!("Configuration file contains errors").bright_red());
     let (start_line, start_column) =
         index_to_line_and_column(config_str, start);
     let (end_line, end_column) = index_to_line_and_column(config_str, end);
