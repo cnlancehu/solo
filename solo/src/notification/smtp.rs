@@ -74,7 +74,7 @@ fn send_child(
             .parse()
             .map_err(|_| "Recipient address is incorrect".to_string())?)
         .body(report.join("\n"))
-        .map_err(|e| format!("Error constructing email | {}", e.to_string()))?;
+        .map_err(|e| format!("Error constructing email | {e}"))?;
 
     let creds = Credentials::new(username.clone(), password.clone());
 
@@ -97,7 +97,7 @@ fn send_child(
 
     mailer
         .send(&email)
-        .map_err(|e| format!("Failed to send email | {}", e.to_string()))?;
+        .map_err(|e| format!("Failed to send email | {e}"))?;
 
     Ok(())
 }

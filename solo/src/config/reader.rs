@@ -73,7 +73,10 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
         let path = get_config_path(&name).ok_or_else(|| anyhow!(""))?;
         let filename = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
         let str = fs::read_to_string(&path).unwrap_or_else(|e| {
-            println!("{}", t!("Unable to read configuration file").bright_red());
+            println!(
+                "{}",
+                t!("Unable to read configuration file").bright_red()
+            );
             println!("{e}");
             exit(1);
         });
@@ -97,7 +100,10 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
                 {
                     continue;
                 }
-                println!("{}", t!("Configuration file contains errors").bright_red());
+                println!(
+                    "{}",
+                    t!("Configuration file contains errors").bright_red()
+                );
                 println!(
                     "{}",
                     t!(
@@ -115,11 +121,17 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
                 {
                     continue;
                 }
-                println!("{}", t!("Configuration file contains errors").bright_red());
                 println!(
                     "{}",
-                    t!("Server %{name}'s region cannot be empty", name = server.name)
-                        .bright_red()
+                    t!("Configuration file contains errors").bright_red()
+                );
+                println!(
+                    "{}",
+                    t!(
+                        "Server %{name}'s region cannot be empty",
+                        name = server.name
+                    )
+                    .bright_red()
                 );
 
                 exit(1);

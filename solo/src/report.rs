@@ -80,7 +80,8 @@ pub fn show_brief_report(report: &ExecutionReport, color: bool) -> Vec<String> {
                 content.push(format!(
                     "[{}] | {}",
                     server_status.name.bright_red_if(color),
-                    t!("Error occurred at %{when}", when = when).bright_red_if(color)
+                    t!("Error occurred at %{when}", when = when)
+                        .bright_red_if(color)
                 ));
                 for line in explain_error(&error, true) {
                     content.push(format!(

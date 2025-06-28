@@ -43,6 +43,7 @@ pub enum EmbedIpProvider {
 }
 
 impl EmbedIpProvider {
+    #[must_use]
     pub fn url(&self) -> String {
         match self {
             Self::IpEcho => "https://ipecho.net/ip".to_string(),

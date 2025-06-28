@@ -61,7 +61,11 @@ pub fn new_config() -> Result<()> {
                 config_path.display().to_string().bright_yellow()
             );
             println!();
-            println!("{}", t!("Edit it, then run with the following command").bright_blue());
+            println!(
+                "{}",
+                t!("Edit it, then run with the following command")
+                    .bright_blue()
+            );
             println!(
                 "{} {} {}",
                 EXE_NAME.bright_cyan(),
@@ -158,12 +162,10 @@ fn handle_key_event(
             }
         }
         KeyCode::Enter => {
-            if event.is_press() {
-                if !buffer.is_empty() {
-                    return Some(InputResult::Value(format!(
-                        "{buffer}{FILE_SUFFIX}"
-                    )));
-                }
+            if event.is_press() && !buffer.is_empty() {
+                return Some(InputResult::Value(format!(
+                    "{buffer}{FILE_SUFFIX}"
+                )));
             }
         }
         _ => {}
