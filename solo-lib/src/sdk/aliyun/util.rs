@@ -39,10 +39,10 @@ impl MachineType {
     pub fn service_info(&self, region_id: &str) -> (String, &'static str) {
         match self {
             MachineType::Sas => {
-                (format!("swas.{}.aliyuncs.com", region_id), "2020-06-01")
+                (format!("swas.{region_id}.aliyuncs.com"), "2020-06-01")
             }
             MachineType::Ecs => {
-                (format!("ecs.{}.aliyuncs.com", region_id), "2014-05-26")
+                (format!("ecs.{region_id}.aliyuncs.com"), "2014-05-26")
             }
         }
     }
@@ -140,7 +140,7 @@ pub(super) fn request_builder(
     );
 
     let result = sha256_hex(&canonical_request);
-    let string_to_sign = format!("ACS3-HMAC-SHA256\n{}", result);
+    let string_to_sign = format!("ACS3-HMAC-SHA256\n{result}");
     let signature =
         hmac256(basic_request.secret.secret_key.as_bytes(), &string_to_sign)
             .map_err(|e| anyhow::anyhow!("{}", e))?;
@@ -152,7 +152,7 @@ pub(super) fn request_builder(
 
     headers.insert("Authorization", HeaderValue::from_str(&auth_data)?);
 
-    let url = format!("https://{}{}", host, canonical_uri);
+    let url = format!("https://{host}{canonical_uri}");
     Ok(client
         .request(Method::POST, url)
         .headers(headers)
@@ -196,7 +196,7 @@ fn build_sored_encoded_query_string(query_params: &[(&str, &str)]) -> String {
         .map(|(k, v)| {
             let encoded_key = percent_code(k);
             let encoded_value = percent_code(v);
-            format!("{}={}", encoded_key, encoded_value)
+            format!("{encoded_key}={encoded_value}")
         })
         .collect();
 
@@ -238,7 +238,7 @@ pub(super) fn flatten_json(
                     let new_prefix = if current_prefix.is_empty() {
                         key.to_string()
                     } else {
-                        format!("{}.{}", current_prefix, key)
+                        format!("{current_prefix}.{key}")
                     };
                     process_value(val, &new_prefix, result);
                 }

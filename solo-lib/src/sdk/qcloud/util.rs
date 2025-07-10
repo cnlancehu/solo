@@ -127,7 +127,7 @@ pub(super) fn request_builder(
         hashed_request_payload
     );
 
-    let credential_scope = format!("{}/{}/tc3_request", date, service);
+    let credential_scope = format!("{date}/{service}/tc3_request");
     let hashed_canonical_request = {
         let mut hasher = Sha256::new();
         hasher.update(canonical_request.as_bytes());

@@ -17,7 +17,7 @@ pub(crate) fn sha256_hex(message: &str) -> String {
 
 pub(crate) fn hmac256(key: &[u8], message: &str) -> Result<Vec<u8>, String> {
     let mut mac = Hmac::<Sha256>::new_from_slice(key)
-        .map_err(|e| format!("use data key on sha256 fail:{}", e))?;
+        .map_err(|e| format!("use data key on sha256 fail:{e}"))?;
     mac.update(message.as_bytes());
     let signature = mac.finalize();
     Ok(signature.into_bytes().to_vec())
