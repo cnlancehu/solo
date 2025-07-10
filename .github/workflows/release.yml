@@ -1,5 +1,8 @@
 name: Release
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -31,7 +34,9 @@ jobs:
         with:
           name: ${{ matrix.os }}-artifact
           path: dist/*
-  Release: 
+  Release:
+    permissions:
+      contents: write
     needs: Build
     runs-on: ubuntu-latest
     steps:
