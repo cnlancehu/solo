@@ -1,3 +1,5 @@
+<img src=".github/splash.png" alt="Solo" />
+
 # Solo
 
 [简体中文](README.md) | **English**
