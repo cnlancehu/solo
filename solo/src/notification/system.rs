@@ -34,8 +34,8 @@ pub async fn send<'a>(
         .err()
 }
 
-async fn send_child<'a>(
-    report: &ExecutionReport<'a>,
+async fn send_child(
+    report: &ExecutionReport<'_>,
     status: &Status,
 ) -> Result<(), Cow<'static, str>> {
     let icon_path = EXE_DIR.join("soloicon.ico");

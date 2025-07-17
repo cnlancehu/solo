@@ -118,13 +118,7 @@ pub(super) fn request_builder(
     let signed_headers = "content-type;host;x-tc-action";
     let hashed_request_payload = sha256_hex(&basic_request.payload);
     let canonical_request = format!(
-        "{}\n{}\n{}\n{}\n{}\n{}",
-        http_request_method,
-        canonical_uri,
-        canonical_querystring,
-        canonical_headers,
-        signed_headers,
-        hashed_request_payload
+        "{http_request_method}\n{canonical_uri}\n{canonical_querystring}\n{canonical_headers}\n{signed_headers}\n{hashed_request_payload}"
     );
 
     let credential_scope = format!("{date}/{service}/tc3_request");
@@ -134,8 +128,7 @@ pub(super) fn request_builder(
         format!("{:x}", hasher.finalize())
     };
     let string_to_sign = format!(
-        "{}\n{}\n{}\n{}",
-        algorithm, timestamp, credential_scope, hashed_canonical_request
+        "{algorithm}\n{timestamp}\n{credential_scope}\n{hashed_canonical_request}"
     );
 
     let secret_date = sign(
