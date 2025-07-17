@@ -1,9 +1,8 @@
-use std::{borrow::Cow, sync::Arc, time::Duration};
+use std::{borrow::Cow, collections::HashMap, sync::Arc, time::Duration};
 
 use chrono::Local;
 use cnxt::Colorize;
 use futures::stream::{FuturesUnordered, StreamExt};
-use hashbrown::HashMap;
 use ipfetcher::{Protocol, fetch_ip};
 use notification::send_notification;
 use report::{ExecutionReport, ExecutionReportIpFetching, show_brief_report};

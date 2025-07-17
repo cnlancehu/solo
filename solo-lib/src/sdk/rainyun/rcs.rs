@@ -1,5 +1,6 @@
+use std::collections::HashSet;
+
 use anyhow::Result;
-use hashbrown::HashSet;
 use http::Method;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};

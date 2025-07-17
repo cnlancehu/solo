@@ -2,10 +2,9 @@
 //!
 //! Begin with the [`go`] function
 
-use std::borrow::Borrow;
+use std::{borrow::Borrow, collections::HashSet};
 
 use anyhow::Result;
-use hashbrown::HashSet;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use serde_json::to_string;
