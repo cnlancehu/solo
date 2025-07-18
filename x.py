@@ -1,10 +1,3 @@
-import os
-import platform
-import subprocess
-import sys
-import zipfile
-import requests
-
 app_name = "solo"
 
 targets = {
@@ -29,7 +22,7 @@ targets = {
     }
 }
 
-def exec(cmd):
+def ci_exec(cmd):
     if platform.system() == "Linux":
         ndk_home = os.environ.get("ANDROID_NDK_HOME")
         ndk_home = os.path.join(ndk_home, "toolchains", "llvm", "prebuilt", "linux-x86_64", "bin")
@@ -62,8 +55,8 @@ def ci_build():
         subprocess.Popen("sudo apt install -y gcc-i686-linux-gnu", stdout=subprocess.PIPE, text=True, shell=True).wait()
     
     for target, alias in targets[os_type].items():
-        exec(f"rustup target add {target}")
-        exec(f"cargo build -r --target {target}")
+        ci_exec(f"rustup target add {target}")
+        ci_exec(f"cargo build -r --target {target}")
         with zipfile.ZipFile(os.path.join("dist", f"{app_name}-{alias}.zip"), "w") as zipf:
             if os_type == "Windows":
                 app_name_with_extension = f"{app_name}.exe"
@@ -84,6 +77,32 @@ def ci_build():
             print(response1.text)
             print(response2.text)
 
+def change_version(version):
+    for cargo_toml_path in glob.glob("**/Cargo.toml", recursive=True):
+        with open(cargo_toml_path, 'r', encoding='utf-8') as f:
+            data = toml.load(f)
+        
+        if 'package' in data and 'version' in data['package']:
+            data['package']['version'] = version
+            
+            with open(cargo_toml_path, 'w', encoding='utf-8') as f:
+                toml.dump(data, f, encoder=toml.TomlEncoder(preserve=True))
+            
+            print(f"Updated version in {cargo_toml_path}")
+
 if __name__ == "__main__":
+    import sys
+
     if sys.argv[1] == "ci":
+        import os
+        import platform
+        import subprocess
+        import zipfile
+        import requests
+
         ci_build()
+    elif sys.argv[1] == "changever":
+        import toml
+        import glob
+
+        change_version(sys.argv[2])
