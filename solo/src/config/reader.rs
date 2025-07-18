@@ -4,7 +4,6 @@ use anyhow::{Result, anyhow};
 use cnxt::Colorize as _;
 use rust_i18n::t;
 use unicode_width::UnicodeWidthStr as _;
-use walkdir::WalkDir;
 
 use super::definition::{
     Config, ConfigFile, MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID,
@@ -42,27 +41,28 @@ pub fn show_avaliable_configs() {
 }
 
 pub fn get_config_list() -> Vec<ConfigFile> {
-    let configfile_paths = WalkDir::new(&*super::CONFIG_DETECTION_PATH)
-        .max_depth(1)
-        .min_depth(1)
-        .into_iter()
+    let config_dir = &*super::CONFIG_DETECTION_PATH;
+    let Ok(entries) = fs::read_dir(config_dir) else {
+        return Vec::new();
+    };
+
+    entries
         .filter_map(Result::ok)
-        .filter_map(|e| e.file_name().to_str().map(String::from))
-        .filter(|n| {
-            Path::new(n)
+        .filter_map(|entry| {
+            let file_name = entry.file_name();
+            let file_name_str = file_name.to_str()?;
+            if Path::new(file_name_str)
                 .extension()
                 .is_some_and(|ext| ext.eq_ignore_ascii_case("toml"))
-        })
-        .collect::<Vec<String>>();
-    configfile_paths
-        .iter()
-        .map(|path| {
-            let name = path.trim_end_matches(".toml").to_string();
-
-            ConfigFile {
-                name,
-                filename: path.to_string(),
+            {
+                Some(file_name_str.to_string())
+            } else {
+                None
             }
+        })
+        .map(|filename| {
+            let name = filename.trim_end_matches(".toml").to_string();
+            ConfigFile { name, filename }
         })
         .collect()
 }

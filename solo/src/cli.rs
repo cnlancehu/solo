@@ -5,7 +5,10 @@ use cnxt::Colorize;
 use rust_i18n::t;
 use unicode_width::UnicodeWidthStr;
 
-use crate::{config::CONFIG_LIST_NAMES, consts::EXE_NAME};
+use crate::{
+    config::{CONFIG_COUNT, CONFIG_LIST_NAMES},
+    consts::EXE_NAME,
+};
 
 pub enum CliAction {
     RunConfig(Vec<String>),
@@ -18,8 +21,6 @@ pub enum ManageConfigAction {
     ShowHelp,
     List,
     New,
-    Del,
-    Edit,
 }
 
 pub fn parse() -> Result<CliAction> {
@@ -72,8 +73,6 @@ fn handle_conf_command(
             "help" => Ok(CliAction::ManageConfig(ManageConfigAction::ShowHelp)),
             "list" => Ok(CliAction::ManageConfig(ManageConfigAction::List)),
             "new" => Ok(CliAction::ManageConfig(ManageConfigAction::New)),
-            "del" => Ok(CliAction::ManageConfig(ManageConfigAction::Del)),
-            "edit" => Ok(CliAction::ManageConfig(ManageConfigAction::Edit)),
 
             _ => {
                 print_error_info(
@@ -301,20 +300,23 @@ pub fn show_help() {
     ));
 
     help.push(format!("\n{}:", t!("Help").bright_green()));
-    // help.push(format!(
-    //     "   {}",
-    //     t!(
-    //         "For first time use, please run %{cmd} to create a new configuration",
-    //         cmd = format!("`{} conf new`", *EXE_NAME)
-    //     )
-    //     .bright_yellow()
-    // ));
+    if *CONFIG_COUNT == 0 {
+        help.push(format!(
+            "   {}",
+            t!(
+                "For first time use, please run %{cmd} to create a new configuration",
+                cmd = format!("`{} conf new`", *EXE_NAME)
+            )
+            .bright_yellow()
+        ));
+    }
     help.push(format!(
         "   {}",
         t!(
             "Online documentation %{url}",
             url = "https://solo.lance.fun"
         )
+        .bright_white()
     ));
 
     for line in help {
@@ -341,8 +343,6 @@ pub fn show_conf_help() {
         "new",
         &t!("Create a new configuration"),
     ));
-    // help.push(help_print_subcommand("del", &t!("Delete a configuration")));
-    // help.push(help_print_subcommand("edit", &t!("Edit a configuration")));
     help.push(help_print_subcommand("help", &t!("Show this help message")));
 
     for line in help {

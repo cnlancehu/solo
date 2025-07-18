@@ -25,6 +25,7 @@ lazy_static! {
     pub static ref CONFIG_LIST: Vec<ConfigFile> = get_config_list();
     pub static ref CONFIG_LIST_NAMES: Vec<String> =
         CONFIG_LIST.iter().map(|f| f.name.clone()).collect();
+    pub static ref CONFIG_COUNT: usize = CONFIG_LIST.len();
 }
 
 pub fn get_config_path(name: &str) -> Option<PathBuf> {

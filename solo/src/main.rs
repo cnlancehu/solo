@@ -70,7 +70,6 @@ async fn main() {
             ManageConfigAction::New => {
                 new_config().unwrap();
             }
-            _ => todo!(),
         },
         ShowVersion => todo!(),
     }
