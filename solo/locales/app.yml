@@ -284,3 +284,6 @@ config_name:
 For first time use, please run %{cmd} to create a new configuration:
   en: For first time use, please run %{cmd} to create a new configuration
   zh-CN: 初次使用时，请运行 %{cmd} 创建新的配置
+Unknown version command:
+  en: Unknown version command
+  zh-CN: 未知的版本命令

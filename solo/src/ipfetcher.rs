@@ -116,6 +116,6 @@ mod tests {
         )
         .await
         .unwrap();
-        println!("{:#?}", result);
+        println!("{result:#?}");
     }
 }

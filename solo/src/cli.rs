@@ -13,7 +13,7 @@ use crate::{
 pub enum CliAction {
     RunConfig(Vec<String>),
     ManageConfig(ManageConfigAction),
-    ShowVersion,
+    Version(VersionAction),
     ShowHelp,
 }
 
@@ -21,6 +21,11 @@ pub enum ManageConfigAction {
     ShowHelp,
     List,
     New,
+}
+
+pub enum VersionAction {
+    Show,
+    Update,
 }
 
 pub fn parse() -> Result<CliAction> {
@@ -34,32 +39,57 @@ pub fn parse() -> Result<CliAction> {
 
     // Parse the first argument
     match args[1].as_str() {
-        "version" | "help" => handle_simple_command(&args, args_quantity),
+        "help" | "--help" | "-h" => handle_help_command(args_quantity),
+        "version" => handle_version_command(&args, args_quantity),
         "conf" => handle_conf_command(&args, args_quantity),
         "go" => handle_go_command(&args, args_quantity),
         _ => handle_unknown_command(),
     }
 }
 
-// Handle simple commands which do not require additional parameters
-fn handle_simple_command(
+fn handle_help_command(args_quantity: usize) -> Result<CliAction> {
+    if args_quantity == 2 {
+        Ok(CliAction::ShowHelp)
+    } else {
+        print_error_info(
+            &[2],
+            &t!("This command does not support more parameters"),
+            Some(&t!("Remove extra parameters and try again")),
+        );
+        Err(anyhow!("Too many parameters"))
+    }
+}
+
+fn handle_version_command(
     args: &[String],
     args_quantity: usize,
 ) -> Result<CliAction> {
-    if args_quantity > 2 {
-        print_error_info(
-            &[2],
-            &t!("This command does not support additional parameters"),
-            Some(&t!("Remove them and try again")),
-        );
-        return Err(anyhow!("Extra parameters"));
+    match args_quantity {
+        2 => Ok(CliAction::Version(VersionAction::Show)),
+        3 => match args[2].as_str() {
+            "show" => Ok(CliAction::Version(VersionAction::Show)),
+            "update" => Ok(CliAction::Version(VersionAction::Update)),
+            _ => {
+                print_error_info(
+                    &[2],
+                    &t!("Unknown version command"),
+                    Some(&t!(
+                        "Type %{cmd} for help",
+                        cmd = format!("`{} version help`", *EXE_NAME)
+                    )),
+                );
+                Err(anyhow!("Wrong command"))
+            }
+        },
+        _ => {
+            print_error_info(
+                &[3],
+                &t!("This command does not support more parameters"),
+                Some(&t!("Remove extra parameters and try again")),
+            );
+            Err(anyhow!("Too many parameters"))
+        }
     }
-
-    Ok(match args[1].as_str() {
-        "version" => CliAction::ShowVersion,
-        "help" => CliAction::ShowHelp,
-        _ => unreachable!(),
-    })
 }
 
 // Handle the `conf` command and its subcommands
@@ -70,7 +100,9 @@ fn handle_conf_command(
     match args_quantity {
         2 => Ok(CliAction::ManageConfig(ManageConfigAction::ShowHelp)),
         3 => match args[2].as_str() {
-            "help" => Ok(CliAction::ManageConfig(ManageConfigAction::ShowHelp)),
+            "help" | "--help" | "-h" => {
+                Ok(CliAction::ManageConfig(ManageConfigAction::ShowHelp))
+            }
             "list" => Ok(CliAction::ManageConfig(ManageConfigAction::List)),
             "new" => Ok(CliAction::ManageConfig(ManageConfigAction::New)),
 
@@ -83,7 +115,7 @@ fn handle_conf_command(
                         cmd = format!("`{} conf help`", *EXE_NAME)
                     )),
                 );
-                Err(anyhow!("Missing parameter"))
+                Err(anyhow!("Wrong command"))
             }
         },
         _ => {
@@ -353,10 +385,11 @@ pub fn show_conf_help() {
 // Helper function to format subcommand help lines
 fn help_print_subcommand(subcommand: &str, description: &str) -> String {
     let reserve_space = 16 - subcommand.width();
+    let is_help = subcommand == "help";
     format!(
         "   {}{}{}",
-        subcommand.bright_cyan(),
+        subcommand.bright_cyan().bright_black_if(is_help),
         " ".repeat(reserve_space),
-        description
+        description.bright_black_if(is_help)
     )
 }

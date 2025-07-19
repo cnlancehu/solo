@@ -152,6 +152,6 @@ mod tests {
         };
 
         let config = toml::to_string(&config).unwrap();
-        println!("{}", config);
+        println!("{config}");
     }
 }
