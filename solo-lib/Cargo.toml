@@ -1,7 +1,7 @@
 [package]
 name = "solo-lib"
 description = "Library for the Solo tool, an app for cloud safety."
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
 license = "Apache-2.0"
 authors = [ "Lance <me@lance.fun>",]
