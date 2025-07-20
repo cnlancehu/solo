@@ -287,3 +287,48 @@ For first time use, please run %{cmd} to create a new configuration:
 Unknown version command:
   en: Unknown version command
   zh-CN: 未知的版本命令
+Build at:
+  en: Build at
+  zh-CN: 构建于
+"Can be upgraded to the latest stable version:":
+  en: "Can be upgraded to the latest stable version:"
+  zh-CN: "可以升级到最新稳定版本:"
+Checking for updates...:
+  en: Checking for updates...
+  zh-CN: 正在检查更新...
+Complete:
+  en: Complete
+  zh-CN: 完成
+"Download error: %{error}":
+  en: "Download error: %{error}"
+  zh-CN: "无法下载: %{error}"
+Downloading:
+  en: Downloading
+  zh-CN: 正在下载
+Failed to download artifact:
+  en: Failed to download artifact
+  zh-CN: 无法下载文件
+"Failed to write file: %{error}":
+  en: "Failed to write file: %{error}"
+  zh-CN: "无法写入文件: %{error}"
+Network error | Unable to connect to server:
+  en: Network error | Unable to connect to server
+  zh-CN: 网络错误 | 无法连接到服务器
+Network error | Unable to process response content:
+  en: Network error | Unable to process response content
+  zh-CN: 网络错误 | 无法处理响应内容
+"New version available:":
+  en: "New version available:"
+  zh-CN: "发现新版本:"
+Performing update:
+  en: Performing update
+  zh-CN: 正在更新
+Run %{cmd} to update:
+  en: Run %{cmd} to update
+  zh-CN: 运行 %{cmd} 进行更新
+You are using a preview/development version.:
+  en: You are using a preview/development version.
+  zh-CN: 您正在使用预览/开发版本。
+You are using the latest version.:
+  en: You are using the latest version.
+  zh-CN: 您正在使用最新版本。

@@ -1,14 +1,49 @@
+use std::{
+    borrow::Cow,
+    fs::{self, OpenOptions},
+    io::{Write as _, stdout},
+    path::PathBuf,
+};
+
 use cnxt::Colorize as _;
+use crossterm::{
+    cursor::MoveToColumn,
+    queue,
+    terminal::{Clear, ClearType},
+};
+use futures_util::StreamExt as _;
 use rust_i18n::t;
+use serde::Deserialize;
+use solo_lib::client;
+
+use crate::consts::{EXE_DIR, EXE_NAME};
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const BUILD_TIME: &str = env!("SOLO_BUILD_TIME");
-pub const TARGET_OS: &str = env!("SOLO_TARGET_OS");
-pub const TARGET_ARCH: &str = env!("SOLO_TARGET_ARCH");
+pub const TARGET: &str = env!("SOLO_TARGET");
 pub const TARGET_OS_DISPLAY: &str = env!("SOLO_TARGET_OS_DISPLAY");
 pub const TARGET_ARCH_DISPLAY: &str = env!("SOLO_TARGET_ARCH_DISPLAY");
 
-pub fn show() {
+#[derive(Debug, Deserialize)]
+struct CheckUpdateResponseArtifact {
+    file_name: String,
+    download_url: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct CheckUpdateResponse {
+    /// Status code indicating version comparison result:
+    /// * 0: Current version is the latest
+    /// * 1: New version available for update
+    /// * -1: Current version is a preview/development version
+    status: i32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    latest_version: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    artifact: Option<Vec<CheckUpdateResponseArtifact>>,
+}
+
+pub async fn show() {
     println!(
         "{} {} {} {} {}",
         "Solo".bright_cyan(),
@@ -22,4 +57,263 @@ pub fn show() {
         t!("Build at").bright_white(),
         BUILD_TIME.bright_blue()
     );
+    println!();
+
+    let mut stdout = stdout();
+
+    print!("{}", t!("Checking for updates...").bright_yellow());
+    let _ = stdout.flush();
+    let response = check_update().await;
+    let _ = queue!(stdout, Clear(ClearType::CurrentLine), MoveToColumn(0));
+
+    match response {
+        Ok(response) => match response.status {
+            0 => {
+                println!(
+                    "{}",
+                    t!("You are using the latest version.").bright_green()
+                );
+            }
+            1 => {
+                println!("{}", t!("New version available:").bright_yellow());
+                println!(
+                    "   {} => {}",
+                    VERSION.bright_red(),
+                    response
+                        .latest_version
+                        .unwrap_or_else(|| "Unknown".to_string())
+                        .bright_green()
+                );
+                println!(
+                    "{}",
+                    t!(
+                        "Run %{cmd} to update",
+                        cmd = format!("`{} version update`", *EXE_NAME)
+                    )
+                    .bright_cyan()
+                );
+            }
+            -1 => {
+                println!(
+                    "{}",
+                    t!("You are using a preview/development version.")
+                        .bright_red()
+                );
+                println!(
+                    "{}",
+                    t!("Can be upgraded to the latest stable version:")
+                        .bright_yellow()
+                );
+                println!(
+                    "   {} => {}",
+                    VERSION.bright_red(),
+                    response
+                        .latest_version
+                        .unwrap_or_else(|| "Unknown".to_string())
+                        .bright_green()
+                );
+                println!(
+                    "{}",
+                    t!(
+                        "Run %{cmd} to update",
+                        cmd = format!("`{} version update`", *EXE_NAME)
+                    )
+                    .bright_cyan()
+                );
+            }
+            _ => (),
+        },
+        Err(err) => {
+            println!("{}", err.bright_red());
+        }
+    }
+}
+
+pub async fn update() {
+    let mut stdout = stdout();
+
+    print!("{}", t!("Checking for updates...").bright_yellow());
+    let _ = stdout.flush();
+    let response = check_update().await;
+    let _ = queue!(stdout, Clear(ClearType::CurrentLine), MoveToColumn(0));
+
+    let response = match response {
+        Ok(response) => response,
+        Err(err) => {
+            println!("{}", err.bright_red());
+            return;
+        }
+    };
+
+    match response.status {
+        0 => {
+            println!(
+                "{}",
+                t!("You are using the latest version.").bright_green()
+            );
+        }
+        1 | -1 => {
+            println!("{}", t!("Performing update").bright_yellow(),);
+            println!(
+                "{} => {}",
+                VERSION.bright_red(),
+                response
+                    .latest_version
+                    .unwrap_or_else(|| "Unknown".to_string())
+                    .bright_green()
+            );
+            println!();
+
+            let client = client::new();
+            let artifacts = response.artifact.unwrap_or_default();
+            let mut artifact_num = 0;
+            let artifacts_len = artifacts.len();
+
+            for artifact in artifacts {
+                artifact_num += 1;
+                let response = client.get(artifact.download_url).send().await;
+                if let Ok(response) = response {
+                    let total_size = response.content_length().unwrap_or(0);
+                    let mut stream = response.bytes_stream();
+                    let mut content = Vec::new();
+                    let mut downloaded = 0;
+
+                    while let Some(chunk) = stream.next().await {
+                        match chunk {
+                            Ok(data) => {
+                                let _ = queue!(
+                                    stdout,
+                                    Clear(ClearType::CurrentLine),
+                                    MoveToColumn(0)
+                                );
+
+                                let data_len = data.len() as u64;
+                                content.extend(data);
+                                downloaded += data_len;
+                                let percent = (downloaded as f64
+                                    / total_size as f64
+                                    * 100.0)
+                                    .round();
+                                print!(
+                                    "{} | {}% | {}/{}",
+                                    t!("Downloading").bright_yellow(),
+                                    percent.to_string().bright_green(),
+                                    artifact_num.to_string().bright_cyan(),
+                                    artifacts_len.to_string().bright_cyan()
+                                );
+                                let _ = stdout.flush();
+                            }
+                            Err(e) => {
+                                println!(
+                                    "{}",
+                                    t!("Download error: %{error}", error = e)
+                                        .bright_red()
+                                );
+                                return;
+                            }
+                        }
+                    }
+
+                    if let Err(e) = force_write(
+                        &content,
+                        &EXE_DIR.join(&artifact.file_name),
+                    ) {
+                        println!(
+                            "{}",
+                            t!("Failed to write file: %{error}", error = e)
+                                .bright_red()
+                        );
+                        return;
+                    }
+                } else {
+                    println!(
+                        "{}",
+                        t!("Failed to download artifact",).bright_red()
+                    );
+                }
+            }
+            let _ =
+                queue!(stdout, Clear(ClearType::CurrentLine), MoveToColumn(0));
+            println!("{}", t!("Complete").bright_green(),);
+        }
+        _ => (),
+    }
+}
+
+async fn check_update() -> Result<CheckUpdateResponse, Cow<'static, str>> {
+    let url =
+        format!("https://pkg.lance.fun/check_update?solo+{VERSION}+{TARGET}");
+    let response = client::new()
+        .get(&url)
+        .send()
+        .await
+        .map_err(|_| t!("Network error | Unable to connect to server"))?;
+    if response.status().is_success() {
+        let response =
+            response.json::<CheckUpdateResponse>().await.map_err(|_| {
+                t!("Network error | Unable to process response content")
+            })?;
+        Ok(response)
+    } else {
+        Err(t!("Network error | Unable to connect to server"))
+    }
+}
+
+fn force_write(content: &[u8], to: &PathBuf) -> Result<(), std::io::Error> {
+    // First try normal write
+    if let Ok(mut file) = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(to)
+    {
+        if file.write_all(content).is_ok() && file.flush().is_ok() {
+            return Ok(());
+        }
+    }
+
+    // If normal write fails, try platform-specific strategies
+    if cfg!(windows) {
+        // On Windows, if the file is in use (like current exe), rename it first
+        let backup_path = to.with_extension("old");
+        let temp_path = to.with_extension("tmp");
+
+        // Write to temporary file first
+        {
+            let mut temp_file = OpenOptions::new()
+                .write(true)
+                .create(true)
+                .truncate(true)
+                .open(&temp_path)?;
+            temp_file.write_all(content)?;
+            temp_file.flush()?;
+        }
+
+        // Try to rename original to backup
+        let _ = fs::rename(to, &backup_path);
+
+        // Move temp file to target location
+        fs::rename(&temp_path, to)?;
+
+        // Clean up backup file
+        let _ = fs::remove_file(&backup_path);
+    } else {
+        // On Unix-like systems, try atomic replacement
+        let temp_path = to.with_extension("tmp");
+
+        // Write to temporary file
+        {
+            let mut temp_file = OpenOptions::new()
+                .write(true)
+                .create(true)
+                .truncate(true)
+                .open(&temp_path)?;
+            temp_file.write_all(content)?;
+            temp_file.flush()?;
+        }
+
+        fs::rename(&temp_path, to)?;
+    }
+
+    Ok(())
 }

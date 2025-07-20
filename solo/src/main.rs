@@ -75,8 +75,8 @@ async fn main() {
             }
         },
         CliAction::Version(action) => match action {
-            VersionAction::Show => version::show(),
-            VersionAction::Update => todo!(),
+            VersionAction::Show => version::show().await,
+            VersionAction::Update => version::update().await,
         },
     }
 }
