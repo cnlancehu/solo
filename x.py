@@ -63,13 +63,23 @@ def ci_build():
             else:
                 app_name_with_extension = app_name
             zipf.write(os.path.join("target", target, "release", app_name_with_extension), arcname=app_name_with_extension, compresslevel=3)
-            os_name, arch = alias.split("-")
         headers = {
             'token': token,
             'user-agent': 'Lance Dev',
         }
-        response1 = requests.request("POST", f"https://pkg.lance.fun/upload?{app_name}+{version}+{os_name}-{arch}+zip+{app_name}.zip", headers=headers, data=open(os.path.join("dist", f"{app_name}-{alias}.zip"), 'rb'))
-        response2 = requests.request("POST", f"https://pkg.lance.fun/upload?{app_name}+{version}+{os_name}-{arch}+files+{app_name_with_extension}", headers=headers, data=open(os.path.join("target", target, "release", app_name_with_extension), 'rb'))
+        max_retries = 10
+        for attempt in range(max_retries):
+            try:
+                response1 = requests.request("POST", f"https://pkg.lance.fun/upload?{app_name}+{version}+{alias}+zip+{app_name}.zip", headers=headers, data=open(os.path.join("dist", f"{app_name}-{alias}.zip"), 'rb'))
+                response2 = requests.request("POST", f"https://pkg.lance.fun/upload?{app_name}+{version}+{alias}+files+{app_name_with_extension}", headers=headers, data=open(os.path.join("target", target, "release", app_name_with_extension), 'rb'))
+                break
+            except requests.exceptions.RequestException as e:
+                if attempt == max_retries - 1:
+                    print(f"Upload failed after {max_retries} attempts: {e}")
+                    response1 = response2 = None
+                    break
+                print(f"Upload attempt {attempt + 1} failed, retrying...")
+                time.sleep(2 ** attempt)  # Exponential backoff
         if response1.ok and response2.ok:
             print("Successfully uploaded")
         else:
@@ -99,6 +109,7 @@ if __name__ == "__main__":
         import subprocess
         import zipfile
         import requests
+        import time
 
         ci_build()
     elif sys.argv[1] == "changever":
