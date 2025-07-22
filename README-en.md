@@ -1,38 +1,42 @@
-<img src=".github/splash.png" alt="Solo" />
+<img src=".github/splash-zh.png" alt="Solo" />
 
 # Solo
 
 [简体中文](README.md) | **English**
 
-A lightweight tool for protecting/hiding server ports
+A cloud server port hiding tool
 
-## Features
-Solo is suitable for developers who meet the following conditions:
-1. Have their own server supported by [Solo](#supported-cloud-providers)
-2. Have important ports on the server, such as SSH, remote desktop, BT panel, etc.
-3. Want these ports to be accessible only by themselves, not exposed publicly and not scanned
+## ✨ Features
 
-With just a few simple steps, you can make these ports accessible only to you while preventing access by others:
+- 🖥️ **Design for Cloud Servers**: Supports mainstream cloud providers
+- 🔒 **Protect Important Port**: SSH, remote desktop, panels and other critical services
+- 🛡️ **Private Access**: Ports are only accessible to you, avoiding malicious scanning
 
-1. Install Solo on your personal device
-2. Configure according to the [documentation](https://solo.lance.fun/)
-3. Run Solo (can be set to start on boot or run periodically)
+## 🚀 Quick Start
 
-## Usage Guide
-### See [Documentation](https://solo.lance.fun/)
+Protect your server in just three steps:
 
-### Go to [Download Page](https://solo.lance.fun/download/)
+1. **Install Solo** - Install Solo on your personal device
+2. **Configure Service** - Configure according to the [documentation](https://solo.lance.fun/)
+3. **Run Protection** - Start Solo (supports auto-start and scheduled running)
 
-## Supported Platforms
+## 📚 Usage Guide
+
+- 📖 [Complete Documentation](https://solo.lance.fun/)
+- ⬇️ [Download Page](https://solo.lance.fun/download/)
+
+## ☁️ Supported Cloud Providers
+
 |   Provider    |                      Products                      |
 | :-----------: | :------------------------------------------------: |
 | Tencent Cloud |         Cloud Virtual Machine, Lighthouse          |
 |    Aliyun     | Elastic Compute Service, Simple Application Server |
-|    Rainyun    |                        RCS                         |
+|    Rainyun    |                 Cloud Server                       |
 
-## Contributing
-Solo is still in early development stage and welcomes your participation.
+## 🤝 Contributing
 
-- Submit Issues: [Github](https://github.com/cnlancehu/solo/issues/new) | [Gitee](https://gitee.com/lancehu/solo/issues/new)
-- Submit [Pull Requests](https://github.com/cnlancehu/solo)
-- [Improve Documentation](https://github.com/cnlancehu/solo-doc)
+Solo is under continuous development and welcomes your participation:
+
+- 🐛 **Report Issues**: [Github Issues](https://github.com/cnlancehu/solo/issues/new) | [Gitee Issues](https://gitee.com/lancehu/solo/issues/new)
+- 🔧 **Code Contribution**: [Submit Pull Request](https://github.com/cnlancehu/solo)
+- 📝 **Documentation Improvement**: [Improve Documentation](https://github.com/cnlancehu/solo-doc)

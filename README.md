@@ -4,35 +4,39 @@
 
 **简体中文** | [English](README-en.md)
 
-一个保护 / 隐藏服务器端口的轻量级工具
+一个云服务器端口隐藏工具
 
-## 功能
-Solo 适用于符合以下条件的开发者:
-1. 有自己的服务器，且受到 [Solo 支持](#支持的云服务商)
-2. 服务器上有一些重要的端口，例如 SSH、远程桌面、宝塔面板 等
-3. 希望这些这些端口只能被自己访问，不对外暴露且不会被扫描
+## ✨ 功能特性
 
-只需要简单几步，就能让这些端口只对你开放，其他人无法访问:
+- 🖥️ **为云服务器设计**：支持主流云服务商
+- 🔒 **保护重要端口**：SSH、远程桌面、面板等关键服务
+- 🛡️ **私人访问**：端口仅对你开放，避免恶意扫描
 
-1. 在你的个人设备上安装 Solo
-2. 按照[文档](https://solo.lance.fun/zh/)配置
-3. 运行 Solo (可设置开机启动或定时运行)
+## 🚀 快速开始
 
-## 使用指南
-### 参阅 [文档](https://solo.lance.fun/zh/)
+只需三步，轻松保护你的服务器：
 
-### 前往 [下载页面](https://solo.lance.fun/zh/download/)
+1. **安装 Solo** - 在你的个人设备上安装 Solo
+2. **配置服务** - 按照 [使用文档](https://solo.lance.fun/zh/) 进行配置
+3. **运行保护** - 启动 Solo（支持开机自启和定时运行）
 
-## 支持的云服务商
-| 服务商 |         云产品          |
-| :----: | :---------------------: |
-| 腾讯云 | 云服务器 轻量应用服务器 |
-| 阿里云 | 云服务器 轻量应用服务器 |
-|  雨云  |        云服务器         |
+## 📚 使用指南
 
-## 参与贡献
-Solo 目前仍处于早期开发阶段，期待你的加入。
+- 📖 [完整文档](https://solo.lance.fun/zh/)
+- ⬇️ [下载页面](https://solo.lance.fun/zh/download/)
 
-- 提交 Issue: [Github](https://github.com/cnlancehu/solo/issues/new) | [Gitee](https://gitee.com/lancehu/solo/issues/new)
-- 提交 [Pull Request](https://github.com/cnlancehu/solo) 
-- [改进文档](https://github.com/cnlancehu/solo-doc)
+## ☁️ 支持的云服务商
+
+| 服务商 |         支持产品         |
+| :----: | :----------------------: |
+| 腾讯云 | 云服务器、轻量应用服务器 |
+| 阿里云 | 云服务器、轻量应用服务器 |
+|  雨云  |         云服务器         |
+
+## 🤝 参与贡献
+
+Solo 正在持续开发中，欢迎你的参与：
+
+- 🐛 **反馈问题**：[Github Issues](https://github.com/cnlancehu/solo/issues/new) | [Gitee Issues](https://gitee.com/lancehu/solo/issues/new)
+- 🔧 **代码贡献**：[提交 Pull Request](https://github.com/cnlancehu/solo)
+- 📝 **文档改进**：[完善文档](https://github.com/cnlancehu/solo-doc)
