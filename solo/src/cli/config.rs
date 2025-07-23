@@ -5,7 +5,9 @@ pub use super::config_new::new;
 use crate::{
     cli::{
         CliAction, ManageConfigAction,
-        util::{HELP_ARGS, help_print_subcommand, print_error_info},
+        util::{
+            HELP_ARGS, HelpSubcommand, build_help_subcommands, print_error_info,
+        },
     },
     config::reader::get_config_list,
     consts::EXE_NAME,
@@ -85,15 +87,19 @@ pub fn show_help() {
         t!("[command]").bright_blue()
     ));
     help.push(format!("{}", t!("Available commands:").bright_green()));
-    help.push(help_print_subcommand(
-        "list",
-        &t!("List available configurations"),
-    ));
-    help.push(help_print_subcommand(
-        "new",
-        &t!("Create a new configuration"),
-    ));
-    help.push(help_print_subcommand("help", &t!("Show this help message")));
+    let subcommands: Vec<HelpSubcommand> = vec![
+        HelpSubcommand {
+            name: "list",
+            additional_arg: None,
+            description: t!("List available configurations"),
+        },
+        HelpSubcommand {
+            name: "new",
+            additional_arg: None,
+            description: t!("Create a new configuration"),
+        },
+    ];
+    help.extend(build_help_subcommands(subcommands));
 
     for line in help {
         println!("{line}");

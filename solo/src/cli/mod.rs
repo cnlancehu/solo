@@ -13,7 +13,9 @@ use crate::{
     cli::{
         config::handle_conf_command,
         go::handle_go_command,
-        util::{HELP_ARGS, help_print_subcommand, print_error_info},
+        util::{
+            HELP_ARGS, HelpSubcommand, build_help_subcommands, print_error_info,
+        },
         version::handle_version_command,
     },
     config::CONFIG_COUNT,
@@ -94,19 +96,24 @@ pub fn show_help() {
         t!("[arguments]").bright_blue(),
     ));
     help.push(format!("{}", t!("Available commands:").bright_green()));
-    help.push(help_print_subcommand(
-        format!("go <{}>", t!("config_name")).as_str(),
-        &t!("Run specified configuration"),
-    ));
-    help.push(help_print_subcommand(
-        "conf",
-        &t!("Manage configuration files"),
-    ));
-    help.push(help_print_subcommand(
-        "version",
-        &t!("Show version information"),
-    ));
-    help.push(help_print_subcommand("help", &t!("Show this help message")));
+    let subcommands: Vec<HelpSubcommand> = vec![
+        HelpSubcommand {
+            name: "go",
+            additional_arg: Some(t!("<config name>")),
+            description: t!("Run specified configuration"),
+        },
+        HelpSubcommand {
+            name: "conf",
+            additional_arg: None,
+            description: t!("Manage configuration files"),
+        },
+        HelpSubcommand {
+            name: "version",
+            additional_arg: None,
+            description: t!("Show version information"),
+        },
+    ];
+    help.extend(build_help_subcommands(subcommands));
 
     help.push(format!("\n{}:", t!("Examples").bright_green()));
     help.push(format!(

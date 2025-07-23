@@ -278,9 +278,9 @@ Waiting for the next execution:
   en: "[command]"
   zh-CN: "[命令]"
 _version: 2
-config_name:
-  en: config_name
-  zh-CN: 配置名称
+"<config name>":
+  en: "<config name>"
+  zh-CN: "<配置名称>"
 For first time use, please run %{cmd} to create a new configuration:
   en: For first time use, please run %{cmd} to create a new configuration
   zh-CN: 初次使用时，请运行 %{cmd} 创建新的配置

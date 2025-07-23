@@ -1,4 +1,4 @@
-use std::env::args;
+use std::{borrow::Cow, env::args};
 
 use cnxt::Colorize as _;
 use rust_i18n::t;
@@ -80,14 +80,55 @@ pub fn print_error_info(
     }
 }
 
-// Helper function to format subcommand help lines
-pub fn help_print_subcommand(subcommand: &str, description: &str) -> String {
-    let reserve_space = 16 - subcommand.width();
-    let is_help = subcommand == "help";
-    format!(
-        "   {}{}{}",
-        subcommand.bright_cyan().bright_black_if(is_help),
-        " ".repeat(reserve_space),
-        description.bright_black_if(is_help)
-    )
+pub struct HelpSubcommand<'a> {
+    pub name: &'a str,
+    pub additional_arg: Option<Cow<'a, str>>,
+    pub description: Cow<'a, str>,
+}
+
+impl HelpSubcommand<'_> {
+    fn command_width(&self) -> usize {
+        self.name.width()
+            + self
+                .additional_arg
+                .as_ref()
+                .map_or(0, |arg| 2 + arg.width())
+    }
+}
+
+pub fn build_help_subcommands(
+    mut subcommands: Vec<HelpSubcommand>,
+) -> Vec<String> {
+    let max_width = subcommands
+        .iter()
+        .map(|s| s.command_width())
+        .max()
+        .unwrap_or(0)
+        + 4;
+
+    subcommands.push(HelpSubcommand {
+        name: "help",
+        additional_arg: None,
+        description: t!("Show this help message"),
+    });
+
+    subcommands
+        .iter()
+        .map(|s| {
+            let arg_part =
+                s.additional_arg.as_ref().map_or(String::new(), |arg| {
+                    format!("  {}", arg.bright_yellow())
+                });
+
+            let padding = " ".repeat(max_width - s.command_width());
+
+            format!(
+                "   {}{}{}{}",
+                s.name.bright_cyan(),
+                arg_part,
+                padding,
+                s.description
+            )
+        })
+        .collect()
 }
