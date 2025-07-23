@@ -18,9 +18,11 @@ use crossterm::{
 use rust_i18n::t;
 use unicode_width::UnicodeWidthStr;
 
-use super::definition::{Config, MachineType, Schedule, Server};
 use crate::{
-    config::CONFIG_DETECTION_PATH,
+    config::{
+        CONFIG_DETECTION_PATH,
+        definition::{Config, MachineType, Schedule, Server},
+    },
     consts::EXE_NAME,
     ipfetcher::{EmbedIpProvider, IpProvider, Protocol},
 };
@@ -39,21 +41,22 @@ enum InputResult {
     Cancelled,
 }
 
-pub fn new_config() -> Result<()> {
+pub fn new() {
     println!("{}", t!("Create Config File").bright_magenta());
 
-    match get_config_filename()? {
-        InputResult::Value(filename) => {
+    match get_config_filename() {
+        Ok(InputResult::Value(filename)) => {
             let config = generate_example_config();
             let config_path = CONFIG_DETECTION_PATH.join(&filename);
 
             if config_path.exists() {
                 println!("{}", t!("File already exists").bright_red());
-                return Ok(());
+                return;
             }
-            fs::write(&config_path, config).inspect_err(|_| {
+            if fs::write(&config_path, config).is_err() {
                 println!("{}", t!("Unable to create config file").bright_red());
-            })?;
+                return;
+            }
             println!(
                 "{}\n{} {}",
                 t!("Config file created").bright_green(),
@@ -73,12 +76,20 @@ pub fn new_config() -> Result<()> {
                 filename.trim_end_matches(FILE_SUFFIX).bright_green()
             );
         }
-        InputResult::Cancelled => {
+        Ok(InputResult::Cancelled) => {
             println!("{}", t!("Operation cancelled").bright_red());
         }
+        Err(e) => {
+            println!(
+                "{}",
+                t!(
+                    "Error creating config file: %{error}",
+                    error = e.to_string().bright_yellow()
+                )
+                .bright_red(),
+            );
+        }
     }
-
-    Ok(())
 }
 
 fn get_config_filename() -> Result<InputResult> {

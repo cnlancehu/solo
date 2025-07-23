@@ -16,9 +16,12 @@ use rust_i18n::t;
 use serde::Deserialize;
 use solo_lib::client;
 
-use crate::consts::{EXE_DIR, EXE_NAME};
+use crate::{
+    VERSION,
+    cli::{CliAction, VersionAction, util::print_error_info},
+    consts::{EXE_DIR, EXE_NAME},
+};
 
-pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const BUILD_TIME: &str = env!("SOLO_BUILD_TIME");
 pub const TARGET: &str = env!("SOLO_TARGET");
 pub const TARGET_OS_DISPLAY: &str = env!("SOLO_TARGET_OS_DISPLAY");
@@ -41,6 +44,38 @@ struct CheckUpdateResponse {
     latest_version: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     artifact: Option<Vec<CheckUpdateResponseArtifact>>,
+}
+
+pub fn handle_version_command(
+    args: &[String],
+    args_quantity: usize,
+) -> Option<CliAction> {
+    match args_quantity {
+        2 => Some(CliAction::Version(VersionAction::Show)),
+        3 => match args[2].as_str() {
+            "show" => Some(CliAction::Version(VersionAction::Show)),
+            "update" => Some(CliAction::Version(VersionAction::Update)),
+            _ => {
+                print_error_info(
+                    &[2],
+                    &t!("Unknown version command"),
+                    Some(&t!(
+                        "Type %{cmd} for help",
+                        cmd = format!("`{} version help`", *EXE_NAME)
+                    )),
+                );
+                None
+            }
+        },
+        _ => {
+            print_error_info(
+                &[3],
+                &t!("This command does not support more parameters"),
+                Some(&t!("Remove extra parameters and try again")),
+            );
+            None
+        }
+    }
 }
 
 pub async fn show() {

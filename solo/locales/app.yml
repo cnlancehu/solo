@@ -332,3 +332,6 @@ You are using a preview/development version.:
 You are using the latest version.:
   en: You are using the latest version.
   zh-CN: 您正在使用最新版本。
+'Error creating config file: %{error}':
+  en: 'Error creating config file: %{error}'
+  zh-CN: '创建配置文件时出错: %{error}'

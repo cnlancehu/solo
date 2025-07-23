@@ -8,37 +8,9 @@ use unicode_width::UnicodeWidthStr as _;
 use super::definition::{
     Config, ConfigFile, MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID,
 };
-use crate::{
-    config::{
-        definition::MACHINE_TYPES_WITH_OPTIONAL_REGION_ID, get_config_path,
-    },
-    consts::EXE_NAME,
+use crate::config::{
+    definition::MACHINE_TYPES_WITH_OPTIONAL_REGION_ID, get_config_path,
 };
-
-pub fn show_avaliable_configs() {
-    let config_list = get_config_list();
-    if config_list.is_empty() {
-        println!("{}", t!("No configuration found").bright_red());
-        println!(
-            "{}",
-            t!(
-                "Run %{cmd} to create one",
-                cmd = format!("`{} conf new`", *EXE_NAME)
-            )
-            .bright_red()
-        );
-        return;
-    }
-
-    println!("{}", t!("Available configurations:").bright_green());
-    for f in &config_list {
-        println!(
-            "  {} {}",
-            f.name.bright_yellow(),
-            format!("({})", f.filename).bright_black(),
-        );
-    }
-}
 
 pub fn get_config_list() -> Vec<ConfigFile> {
     let config_dir = &*super::CONFIG_DETECTION_PATH;
