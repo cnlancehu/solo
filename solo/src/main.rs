@@ -68,7 +68,7 @@ async fn main() {
         }
         CliAction::ManageConfig(action) => match action {
             ManageConfigAction::ShowHelp => cli::config::show_help(),
-            ManageConfigAction::List => cli::config::show_avaliable_configs(),
+            ManageConfigAction::List => cli::config::show_available_configs(),
             ManageConfigAction::New => {
                 cli::config::new();
             }

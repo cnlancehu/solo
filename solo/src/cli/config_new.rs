@@ -109,7 +109,7 @@ fn get_config_filename() -> Result<InputResult> {
     let mut buffer = String::new();
 
     print!("{prompt}{suffix}");
-    queue!(stdout, MoveToColumn((raw_prompt.width()) as u16))?;
+    queue!(stdout, MoveToColumn(raw_prompt.width() as u16))?;
     stdout.flush()?;
 
     let result = input_loop(

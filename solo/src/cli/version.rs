@@ -307,22 +307,23 @@ fn force_write(content: &[u8], to: &PathBuf) -> Result<(), std::io::Error> {
         }
     }
 
-    // If normal write fails, try platform-specific strategies
+    // If normal write fails, use atomic replacement strategy
+    let temp_path = to.with_extension("tmp");
+
+    // Write to temporary file first
+    {
+        let mut temp_file = OpenOptions::new()
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open(&temp_path)?;
+        temp_file.write_all(content)?;
+        temp_file.flush()?;
+    }
+
     if cfg!(windows) {
         // On Windows, if the file is in use (like current exe), rename it first
         let backup_path = to.with_extension("old");
-        let temp_path = to.with_extension("tmp");
-
-        // Write to temporary file first
-        {
-            let mut temp_file = OpenOptions::new()
-                .write(true)
-                .create(true)
-                .truncate(true)
-                .open(&temp_path)?;
-            temp_file.write_all(content)?;
-            temp_file.flush()?;
-        }
 
         // Try to rename original to backup
         let _ = fs::rename(to, &backup_path);
@@ -333,20 +334,7 @@ fn force_write(content: &[u8], to: &PathBuf) -> Result<(), std::io::Error> {
         // Clean up backup file
         let _ = fs::remove_file(&backup_path);
     } else {
-        // On Unix-like systems, try atomic replacement
-        let temp_path = to.with_extension("tmp");
-
-        // Write to temporary file
-        {
-            let mut temp_file = OpenOptions::new()
-                .write(true)
-                .create(true)
-                .truncate(true)
-                .open(&temp_path)?;
-            temp_file.write_all(content)?;
-            temp_file.flush()?;
-        }
-
+        // On Unix-like systems, atomic replacement
         fs::rename(&temp_path, to)?;
     }
 

@@ -101,7 +101,7 @@ pub fn build_help_subcommands(
 ) -> Vec<String> {
     let max_width = subcommands
         .iter()
-        .map(|s| s.command_width())
+        .map(HelpSubcommand::command_width)
         .max()
         .unwrap_or(0)
         + 4;

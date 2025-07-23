@@ -51,7 +51,7 @@ pub fn handle_conf_command(
     }
 }
 
-pub fn show_avaliable_configs() {
+pub fn show_available_configs() {
     let config_list = get_config_list();
     if config_list.is_empty() {
         println!("{}", t!("No configuration found").bright_red());

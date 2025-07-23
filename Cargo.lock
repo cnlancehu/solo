@@ -1733,7 +1733,6 @@ dependencies = [
  "tokio",
  "toml 0.9.2",
  "unicode-width",
- "walkdir",
 ]
 
 [[package]]

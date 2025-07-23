@@ -56,7 +56,7 @@ pub fn compare_rules(
         matched_descriptions.iter().map(|s| s.as_str()).collect();
 
     let mut require_update = false;
-    let mut recordss_to_be_modified: Vec<Record> = Vec::new();
+    let mut records_to_be_modified: Vec<Record> = Vec::new();
 
     records.iter().for_each(|record| {
         if matched_set.contains(record.description.as_str())
@@ -64,12 +64,12 @@ pub fn compare_rules(
         {
             let mut record = record.clone();
             record.source_address = current_ipv4.to_string();
-            recordss_to_be_modified.push(record);
+            records_to_be_modified.push(record);
             require_update = true;
         }
     });
 
-    (recordss_to_be_modified, require_update)
+    (records_to_be_modified, require_update)
 }
 
 pub async fn modify_rules<'a>(
