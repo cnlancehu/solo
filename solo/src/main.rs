@@ -12,13 +12,13 @@ use std::{
     fs, process,
 };
 
-use cli::{CliAction, ManageConfigAction};
+use cli::{CliAction, HelpInfo, ManageConfigAction};
 use cnxt::Colorize as _;
 use config::CONFIG_DETECTION_PATH;
 use rust_i18n::set_locale;
 use sys_locale::get_locale;
 
-use crate::cli::VersionAction;
+use crate::cli::{VersionAction, conf, go, version};
 
 mod cli;
 mod config;
@@ -62,15 +62,19 @@ async fn main() {
     }
 
     match action {
-        CliAction::ShowHelp => cli::show_help(),
+        CliAction::ShowHelp(info) => match info {
+            HelpInfo::Main => cli::show_help(),
+            HelpInfo::Go => go::show_help(),
+            HelpInfo::Conf => conf::show_help(),
+            HelpInfo::Version => version::show_help(),
+        },
         CliAction::RunConfig(config) => {
             exec::run(config).await;
         }
         CliAction::ManageConfig(action) => match action {
-            ManageConfigAction::ShowHelp => cli::config::show_help(),
-            ManageConfigAction::List => cli::config::show_available_configs(),
+            ManageConfigAction::List => cli::conf::show_available_configs(),
             ManageConfigAction::New => {
-                cli::config::new();
+                cli::conf::new();
             }
         },
         CliAction::Version(action) => match action {

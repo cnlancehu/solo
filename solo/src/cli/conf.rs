@@ -1,10 +1,10 @@
 use cnxt::Colorize as _;
 use rust_i18n::t;
 
-pub use super::config_new::new;
+pub use super::conf_new::new;
 use crate::{
     cli::{
-        CliAction, ManageConfigAction,
+        CliAction, HelpInfo, ManageConfigAction,
         util::{
             HELP_ARGS, HelpSubcommand, build_help_subcommands, print_error_info,
         },
@@ -19,10 +19,10 @@ pub fn handle_conf_command(
     args_quantity: usize,
 ) -> Option<CliAction> {
     match args_quantity {
-        2 => Some(CliAction::ManageConfig(ManageConfigAction::ShowHelp)),
+        2 => Some(CliAction::ShowHelp(HelpInfo::Conf)),
         3 => match args[2].as_str() {
             arg if HELP_ARGS.contains(&arg) => {
-                Some(CliAction::ManageConfig(ManageConfigAction::ShowHelp))
+                Some(CliAction::ShowHelp(HelpInfo::Conf))
             }
 
             "list" => Some(CliAction::ManageConfig(ManageConfigAction::List)),

@@ -2,7 +2,10 @@ use cnxt::Colorize as _;
 use rust_i18n::t;
 
 use crate::{
-    cli::{CliAction, util::print_error_info},
+    cli::{
+        CliAction, HelpInfo,
+        util::{HELP_ARGS, print_error_info},
+    },
     config::CONFIG_LIST_NAMES,
     consts::EXE_NAME,
 };
@@ -13,13 +16,14 @@ pub fn handle_go_command(
     args_quantity: usize,
 ) -> Option<CliAction> {
     if args_quantity == 2 {
-        print_error_info(
-            &[2],
-            &t!("Missing configuration name"),
-            Some(&t!("Please provide the configuration name to run")),
-        );
-        None
+        Some(CliAction::ShowHelp(HelpInfo::Go))
     } else {
+        if let Some(arg) = args.get(2) {
+            if HELP_ARGS.contains(&arg.as_str()) {
+                return Some(CliAction::ShowHelp(HelpInfo::Go));
+            }
+        }
+
         let configs: Vec<String> = args[2..].to_vec();
 
         // Check for duplicate configuration names
@@ -88,5 +92,46 @@ pub fn handle_go_command(
 
             None
         }
+    }
+}
+
+// Show the help message for the `go` command
+pub fn show_help() {
+    let mut help: Vec<String> = Vec::new();
+    help.push(format!(
+        "{} {} {} {}\n",
+        t!("Usage:").bright_green(),
+        EXE_NAME.bright_cyan(),
+        "go".bright_yellow(),
+        t!("<config name>").bright_blue()
+    ));
+    help.push(format!("{}:", t!("Examples").bright_green()));
+    help.push(format!(
+        "   {} {} {}",
+        EXE_NAME.bright_cyan(),
+        "go".bright_magenta(),
+        "config".bright_yellow()
+    ));
+    help.push(format!(
+        "   {}",
+        t!("Run configuration named `config`").bright_magenta()
+    ));
+    help.push(String::new());
+    help.push(format!("   {}", t!("EXPERIMENTAL").bright_red()));
+    help.push(format!(
+        "   {} {} {} {}",
+        EXE_NAME.bright_cyan(),
+        "go".bright_magenta(),
+        "config1".bright_yellow(),
+        "config2".bright_yellow()
+    ));
+    help.push(format!(
+        "   {}",
+        t!("Run multiple configurations: `config1` and `config2`")
+            .bright_magenta()
+    ));
+
+    for line in help {
+        println!("{line}");
     }
 }

@@ -1,5 +1,5 @@
-pub mod config;
-mod config_new;
+pub mod conf;
+mod conf_new;
 pub mod go;
 pub mod util;
 pub mod version;
@@ -11,7 +11,7 @@ use rust_i18n::t;
 
 use crate::{
     cli::{
-        config::handle_conf_command,
+        conf::handle_conf_command,
         go::handle_go_command,
         util::{
             HELP_ARGS, HelpSubcommand, build_help_subcommands, print_error_info,
@@ -26,11 +26,10 @@ pub enum CliAction {
     RunConfig(Vec<String>),
     ManageConfig(ManageConfigAction),
     Version(VersionAction),
-    ShowHelp,
+    ShowHelp(HelpInfo),
 }
 
 pub enum ManageConfigAction {
-    ShowHelp,
     List,
     New,
 }
@@ -40,13 +39,20 @@ pub enum VersionAction {
     Update,
 }
 
+pub enum HelpInfo {
+    Main,
+    Go,
+    Conf,
+    Version,
+}
+
 pub fn parse() -> Option<CliAction> {
     let args: Vec<String> = args().collect();
     let args_quantity = args.len();
 
     // Show help if no command is provided
     if args_quantity == 1 {
-        return Some(CliAction::ShowHelp);
+        return Some(CliAction::ShowHelp(HelpInfo::Main));
     }
 
     // Parse the first argument
@@ -61,7 +67,7 @@ pub fn parse() -> Option<CliAction> {
 
 fn handle_help_command(args_quantity: usize) -> Option<CliAction> {
     if args_quantity == 2 {
-        Some(CliAction::ShowHelp)
+        Some(CliAction::ShowHelp(HelpInfo::Main))
     } else {
         print_error_info(
             &[2],
@@ -120,11 +126,11 @@ pub fn show_help() {
         "   {} {} {}",
         EXE_NAME.bright_cyan(),
         "go".bright_magenta(),
-        "solo-config".bright_yellow()
+        "config".bright_yellow()
     ));
     help.push(format!(
         "   {}",
-        t!("Run configuration named `solo-config`").bright_magenta()
+        t!("Run configuration named `config`").bright_magenta()
     ));
 
     help.push(format!("\n{}:", t!("Help").bright_green()));

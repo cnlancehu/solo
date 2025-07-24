@@ -169,9 +169,9 @@ Run %{cmd} to create one:
 Run %{cmd} to view available configuration list:
   en: Run %{cmd} to view available configuration list
   zh-CN: 运行 %{cmd} 以查看可用的配置文件
-Run configuration named `solo-config`:
-  en: Run configuration named `solo-config`
-  zh-CN: 运行名为 `solo-config` 的配置
+Run configuration named `config`:
+  en: Run configuration named `config`
+  zh-CN: 运行名为 `config` 的配置
 Run specified configuration:
   en: Run specified configuration
   zh-CN: 运行指定配置
@@ -332,6 +332,15 @@ You are using a preview/development version.:
 You are using the latest version.:
   en: You are using the latest version.
   zh-CN: 您正在使用最新版本。
-'Error creating config file: %{error}':
-  en: 'Error creating config file: %{error}'
-  zh-CN: '创建配置文件时出错: %{error}'
+"Error creating config file: %{error}":
+  en: "Error creating config file: %{error}"
+  zh-CN: "创建配置文件时出错: %{error}"
+EXPERIMENTAL:
+  en: EXPERIMENTAL
+  zh-CN: 实验性功能
+"Run multiple configurations: `config1` and `config2`":
+  en: "Run multiple configurations: `config1` and `config2`"
+  zh-CN: "同时运行多个配置: `config1` 和 `config2`"
+Perform version update:
+  en: Perform version update
+  zh-CN: 进行版本更新

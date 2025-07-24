@@ -18,7 +18,12 @@ use solo_lib::client;
 
 use crate::{
     VERSION,
-    cli::{CliAction, VersionAction, util::print_error_info},
+    cli::{
+        CliAction, HelpInfo, VersionAction,
+        util::{
+            HELP_ARGS, HelpSubcommand, build_help_subcommands, print_error_info,
+        },
+    },
     consts::{EXE_DIR, EXE_NAME},
 };
 
@@ -53,6 +58,9 @@ pub fn handle_version_command(
     match args_quantity {
         2 => Some(CliAction::Version(VersionAction::Show)),
         3 => match args[2].as_str() {
+            arg if HELP_ARGS.contains(&arg) => {
+                Some(CliAction::ShowHelp(HelpInfo::Version))
+            }
             "show" => Some(CliAction::Version(VersionAction::Show)),
             "update" => Some(CliAction::Version(VersionAction::Update)),
             _ => {
@@ -339,4 +347,34 @@ fn force_write(content: &[u8], to: &PathBuf) -> Result<(), std::io::Error> {
     }
 
     Ok(())
+}
+
+// Show the help message for the `version` command
+pub fn show_help() {
+    let mut help: Vec<String> = Vec::new();
+    help.push(format!(
+        "{} {} {} {}\n",
+        t!("Usage:").bright_green(),
+        EXE_NAME.bright_cyan(),
+        "version".bright_yellow(),
+        t!("[command]").bright_blue()
+    ));
+    help.push(format!("{}", t!("Available commands:").bright_green()));
+    let subcommands: Vec<HelpSubcommand> = vec![
+        HelpSubcommand {
+            name: "show",
+            additional_arg: None,
+            description: t!("Show version information"),
+        },
+        HelpSubcommand {
+            name: "update",
+            additional_arg: None,
+            description: t!("Perform version update"),
+        },
+    ];
+    help.extend(build_help_subcommands(subcommands));
+
+    for line in help {
+        println!("{line}");
+    }
 }
