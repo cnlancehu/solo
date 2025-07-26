@@ -1,4 +1,4 @@
-<img src=".github/splash-zh.png" alt="Solo" />
+<img src=".github/splash.png" alt="Solo" />
 
 # Solo
 

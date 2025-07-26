@@ -3,6 +3,7 @@ use std::{borrow::Cow, net::IpAddr, time::Duration};
 use anyhow::Result;
 use reqwest::ClientBuilder;
 use serde::{Deserialize, Serialize};
+use solo_lib::client;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Copy)]
 #[serde(rename_all = "lowercase")]
@@ -98,10 +99,9 @@ async fn fetch_ipv6(url: &str) -> Result<String> {
 }
 
 fn client_builder() -> ClientBuilder {
-    ClientBuilder::new()
+    client::new_builder()
         .no_proxy()
         .timeout(Duration::from_secs(5))
-        .user_agent("Solo")
 }
 
 #[cfg(test)]
