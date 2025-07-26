@@ -76,7 +76,7 @@ pub fn print_error_info(
     }
 
     for line in print_content {
-        println!("{line}");
+        eprintln!("{line}");
     }
 }
 

@@ -167,7 +167,7 @@ pub async fn show() {
             _ => (),
         },
         Err(err) => {
-            println!("{}", err.bright_red());
+            eprintln!("{}", err.bright_red());
         }
     }
 }
@@ -247,7 +247,7 @@ pub async fn update() {
                                 let _ = stdout.flush();
                             }
                             Err(e) => {
-                                println!(
+                                eprintln!(
                                     "{}",
                                     t!("Download error: %{error}", error = e)
                                         .bright_red()
@@ -261,7 +261,7 @@ pub async fn update() {
                         &content,
                         &EXE_DIR.join(&artifact.file_name),
                     ) {
-                        println!(
+                        eprintln!(
                             "{}",
                             t!("Failed to write file: %{error}", error = e)
                                 .bright_red()
@@ -269,7 +269,7 @@ pub async fn update() {
                         return;
                     }
                 } else {
-                    println!(
+                    eprintln!(
                         "{}",
                         t!("Failed to download artifact",).bright_red()
                     );

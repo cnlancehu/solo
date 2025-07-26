@@ -45,11 +45,11 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
         let path = get_config_path(&name).ok_or_else(|| anyhow!(""))?;
         let filename = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
         let str = fs::read_to_string(&path).unwrap_or_else(|e| {
-            println!(
+            eprintln!(
                 "{}",
                 t!("Unable to read configuration file").bright_red()
             );
-            println!("{e}");
+            eprintln!("{e}");
             exit(1);
         });
         let config: Config = toml::from_str(&str).map_err(|e| {
@@ -72,11 +72,11 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
                 {
                     continue;
                 }
-                println!(
+                eprintln!(
                     "{}",
                     t!("Configuration file contains errors").bright_red()
                 );
-                println!(
+                eprintln!(
                     "{}",
                     t!(
                         "Server %{name}'s secret_id cannot be empty",
@@ -93,11 +93,11 @@ pub fn process_config(config: Vec<String>) -> Result<Vec<Config>> {
                 {
                     continue;
                 }
-                println!(
+                eprintln!(
                     "{}",
                     t!("Configuration file contains errors").bright_red()
                 );
-                println!(
+                eprintln!(
                     "{}",
                     t!(
                         "Server %{name}'s region cannot be empty",
@@ -130,7 +130,7 @@ fn print_config_error(
     message: &str,
     help: Option<Cow<'static, str>>,
 ) {
-    println!("{}", t!("Configuration file contains errors").bright_red());
+    eprintln!("{}", t!("Configuration file contains errors").bright_red());
     let (start_line, start_column) =
         index_to_line_and_column(config_str, start);
     let (end_line, end_column) = index_to_line_and_column(config_str, end);
@@ -138,7 +138,7 @@ fn print_config_error(
     let empty_line =
         format!("{}{}", " ".repeat(indentation + 1), "|".bright_cyan());
 
-    println!(
+    eprintln!(
         "{}{}{}:{}:{}",
         " ".repeat(indentation),
         "--> ".bright_cyan(),
@@ -146,7 +146,7 @@ fn print_config_error(
         start_line,
         start_column
     );
-    println!("{}", &empty_line);
+    eprintln!("{}", &empty_line);
     let content_lines: Vec<ConfigContentLine> = config_str
         .lines()
         .enumerate()
@@ -164,7 +164,7 @@ fn print_config_error(
         {
             let line_number = content_line.line_number.to_string();
             if content_line.is_error_line {
-                println!(
+                eprintln!(
                     "{}{} {} {}",
                     " ".repeat(indentation - line_number.width()),
                     line_number.bright_cyan(),
@@ -173,7 +173,7 @@ fn print_config_error(
                 );
 
                 if start_line == end_line {
-                    println!(
+                    eprintln!(
                         "{} {}{}",
                         empty_line,
                         " ".repeat(start_column - 1),
@@ -181,19 +181,19 @@ fn print_config_error(
                     );
                 }
             } else {
-                println!("{} {}", empty_line, content_line.content);
+                eprintln!("{} {}", empty_line, content_line.content);
             }
         }
     }
-    println!("{}", &empty_line);
-    println!(
+    eprintln!("{}", &empty_line);
+    eprintln!(
         "{}{}{}",
         " ".repeat(indentation + 1),
         "= ".bright_cyan(),
         message.bright_red()
     );
     if let Some(help) = help {
-        println!(
+        eprintln!(
             "{}{}{}",
             " ".repeat(indentation + 1),
             "+ ".bright_cyan(),
