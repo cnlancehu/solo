@@ -27,6 +27,24 @@ pub struct Record {
     pub description: String,
 }
 
+pub async fn go(
+    client: &Client,
+    instance_id: &str,
+    token: &str,
+    current_ip: &str,
+    matched_descriptions: &[String],
+) -> Result<()> {
+    let response = list_rules(client, instance_id, token).await?;
+    let records = response.data.records;
+    let (records_to_be_modified, require_update) =
+        compare_rules(&records, current_ip, matched_descriptions);
+    if require_update {
+        modify_rules(client, instance_id, token, &records_to_be_modified)
+            .await?;
+    }
+    Ok(())
+}
+
 pub async fn list_rules<'a>(
     client: &Client,
     instance_id: &'a str,
