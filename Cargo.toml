@@ -10,25 +10,11 @@ rust-i18n = "3.1.5"
 unicode-width = "0.2.1"
 anyhow = "1.0.98"
 lazy_static = "1.5.0"
-reqwest = { version = "0.12.22", default-features = false, features = [
-    "rustls-tls-native-roots",
-    "json",
-
-    "stream",
-] }
 serde_json = "1.0.141"
 chrono = "0.4.41"
 futures = "0.3.31"
 futures-util = "0.3.31"
 cnxt = { version = "0.1.6", features = ["conditional-coloring"] }
-lettre = { version = "0.11.17", default-features = false, features = [
-    "rustls",
-    "rustls-native-certs",
-    "ring",
-
-    "smtp-transport",
-    "builder",
-] }
 toml = "0.9.5"
 rand = "0.9.2"
 crossterm = "0.29.0"

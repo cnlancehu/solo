@@ -16,9 +16,25 @@ hmac = { workspace = true }
 http = { workspace = true }
 percent-encoding = { workspace = true }
 rand = { workspace = true }
-reqwest = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 sha2 = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
+
+# Use native TLS for Windows and macOS for better tls support
+[target.'cfg(any(target_os = "windows", target_os = "macos"))'.dependencies]
+reqwest = { version = "0.12.22", default-features = false, features = [
+    "native-tls",
+    "json",
+
+    "stream",
+] }
+
+[target.'cfg(not(any(target_os = "windows", target_os = "macos")))'.dependencies]
+reqwest = { version = "0.12.22", default-features = false, features = [
+    "rustls-tls-native-roots",
+    "json",
+
+    "stream",
+] }
