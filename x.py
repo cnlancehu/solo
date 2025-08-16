@@ -87,19 +87,6 @@ def ci_build():
             print(response1.text)
             print(response2.text)
 
-def change_version(version):
-    for cargo_toml_path in glob.glob("**/Cargo.toml", recursive=True):
-        with open(cargo_toml_path, 'r', encoding='utf-8') as f:
-            data = toml.load(f)
-        
-        if 'package' in data and 'version' in data['package']:
-            data['package']['version'] = version
-            
-            with open(cargo_toml_path, 'w', encoding='utf-8') as f:
-                toml.dump(data, f, encoder=toml.TomlEncoder(preserve=True))
-            
-            print(f"Updated version in {cargo_toml_path}")
-
 if __name__ == "__main__":
     import sys
 
@@ -112,8 +99,3 @@ if __name__ == "__main__":
         import time
 
         ci_build()
-    elif sys.argv[1] == "changever":
-        import toml
-        import glob
-
-        change_version(sys.argv[2])
