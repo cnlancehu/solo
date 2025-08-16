@@ -70,7 +70,7 @@ pub fn new() {
     match get_config_filename() {
         Ok(InputResult::Value(filename)) => create_config_file(filename),
         Ok(InputResult::Cancelled) => {
-            println!("{}", t!("Operation cancelled").bright_red())
+            println!("{}", t!("Operation cancelled").bright_red());
         }
         Err(e) => println!(
             "{}",
@@ -128,25 +128,25 @@ fn get_config_filename() -> Result<InputResult> {
     render_prompt(
         &prompt,
         &buffer,
-        FILE_SUFFIX.bright_black(),
+        &FILE_SUFFIX.bright_black(),
         termsize,
         &raw_prompt,
     )?;
 
     loop {
-        if poll(POLL_DURATION)? {
-            if let Event::Key(event) = read()? {
-                if let Some(res) = handle_key_event(event, &mut buffer) {
-                    return Ok(res);
-                }
-                render_prompt(
-                    &prompt,
-                    &buffer,
-                    FILE_SUFFIX.bright_black(),
-                    termsize,
-                    &raw_prompt,
-                )?;
+        if poll(POLL_DURATION)?
+            && let Event::Key(event) = read()?
+        {
+            if let Some(res) = handle_key_event(event, &mut buffer) {
+                return Ok(res);
             }
+            render_prompt(
+                &prompt,
+                &buffer,
+                &FILE_SUFFIX.bright_black(),
+                termsize,
+                &raw_prompt,
+            )?;
         }
     }
 }
@@ -181,7 +181,7 @@ fn handle_key_event(
 fn render_prompt(
     prompt: &str,
     buffer: &str,
-    suffix: impl ToString,
+    suffix: &impl ToString,
     termsize: u16,
     raw_prompt: &str,
 ) -> Result<()> {

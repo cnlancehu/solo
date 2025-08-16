@@ -18,10 +18,10 @@ pub fn handle_go_command(
     if args_quantity == 2 {
         Some(CliAction::ShowHelp(HelpInfo::Go))
     } else {
-        if let Some(arg) = args.get(2) {
-            if HELP_ARGS.contains(&arg.as_str()) {
-                return Some(CliAction::ShowHelp(HelpInfo::Go));
-            }
+        if let Some(arg) = args.get(2)
+            && HELP_ARGS.contains(&arg.as_str())
+        {
+            return Some(CliAction::ShowHelp(HelpInfo::Go));
         }
 
         let configs: Vec<String> = args[2..].to_vec();

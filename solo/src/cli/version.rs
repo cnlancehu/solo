@@ -3,6 +3,11 @@ use std::{
     fs::{self, OpenOptions},
     io::{Write as _, stdout},
     path::PathBuf,
+    sync::{
+        Arc,
+        atomic::{AtomicU64, Ordering},
+    },
+    time::Duration,
 };
 
 use cnxt::Colorize as _;
@@ -15,6 +20,7 @@ use futures_util::StreamExt as _;
 use rust_i18n::t;
 use serde::Deserialize;
 use solo_lib::client;
+use tokio::{task, time::sleep};
 
 use crate::{
     VERSION,
@@ -45,9 +51,7 @@ struct CheckUpdateResponse {
     /// * 1: New version available for update
     /// * -1: Current version is a preview/development version
     status: i32,
-    #[serde(skip_serializing_if = "Option::is_none")]
     latest_version: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     artifact: Option<Vec<CheckUpdateResponseArtifact>>,
 }
 
@@ -181,7 +185,7 @@ pub async fn update() {
     let _ = queue!(stdout, Clear(ClearType::CurrentLine), MoveToColumn(0));
 
     let response = match response {
-        Ok(response) => response,
+        Ok(r) => r,
         Err(err) => {
             println!("{}", err.bright_red());
             return;
@@ -196,7 +200,7 @@ pub async fn update() {
             );
         }
         1 | -1 => {
-            println!("{}", t!("Performing update").bright_yellow(),);
+            println!("{}", t!("Performing update").bright_yellow());
             println!(
                 "{} => {}",
                 VERSION.bright_red(),
@@ -209,42 +213,58 @@ pub async fn update() {
 
             let client = client::new();
             let artifacts = response.artifact.unwrap_or_default();
-            let mut artifact_num = 0;
             let artifacts_len = artifacts.len();
 
-            for artifact in artifacts {
-                artifact_num += 1;
-                let response = client.get(artifact.download_url).send().await;
+            for (i, artifact) in artifacts.into_iter().enumerate() {
+                let idx = i + 1;
+                let response = client.get(&artifact.download_url).send().await;
                 if let Ok(response) = response {
                     let total_size = response.content_length().unwrap_or(0);
                     let mut stream = response.bytes_stream();
                     let mut content = Vec::new();
-                    let mut downloaded = 0;
+
+                    let downloaded = Arc::new(AtomicU64::new(0));
+
+                    let progress = downloaded.clone();
+                    let handle = task::spawn(async move {
+                        let mut task_stdout = std::io::stdout();
+                        loop {
+                            let done = progress.load(Ordering::Relaxed);
+                            let percent = if total_size > 0 {
+                                (done as f64 / total_size as f64 * 100.0)
+                                    .round()
+                                    as u64
+                            } else {
+                                0u64
+                            };
+
+                            let _ = queue!(
+                                task_stdout,
+                                Clear(ClearType::CurrentLine),
+                                MoveToColumn(0)
+                            );
+                            print!(
+                                "{} | {}% | {}/{}",
+                                t!("Downloading").bright_yellow(),
+                                format!("{percent:>3}").bright_green(),
+                                idx.to_string().bright_cyan(),
+                                artifacts_len.to_string().bright_cyan()
+                            );
+                            let _ = task_stdout.flush();
+
+                            if total_size > 0 && done >= total_size {
+                                break;
+                            }
+                            sleep(Duration::from_millis(50)).await;
+                        }
+                    });
 
                     while let Some(chunk) = stream.next().await {
                         match chunk {
                             Ok(data) => {
-                                let _ = queue!(
-                                    stdout,
-                                    Clear(ClearType::CurrentLine),
-                                    MoveToColumn(0)
-                                );
-
-                                let data_len = data.len() as u64;
+                                let len = data.len() as u64;
+                                downloaded.fetch_add(len, Ordering::Relaxed);
                                 content.extend(data);
-                                downloaded += data_len;
-                                let percent = (downloaded as f64
-                                    / total_size as f64
-                                    * 100.0)
-                                    .round();
-                                print!(
-                                    "{} | {}% | {}/{}",
-                                    t!("Downloading").bright_yellow(),
-                                    percent.to_string().bright_green(),
-                                    artifact_num.to_string().bright_cyan(),
-                                    artifacts_len.to_string().bright_cyan()
-                                );
-                                let _ = stdout.flush();
                             }
                             Err(e) => {
                                 eprintln!(
@@ -256,6 +276,8 @@ pub async fn update() {
                             }
                         }
                     }
+
+                    handle.await.unwrap();
 
                     if let Err(e) = force_write(
                         &content,
@@ -271,13 +293,14 @@ pub async fn update() {
                 } else {
                     eprintln!(
                         "{}",
-                        t!("Failed to download artifact",).bright_red()
+                        t!("Failed to download artifact").bright_red()
                     );
                 }
             }
+
             let _ =
                 queue!(stdout, Clear(ClearType::CurrentLine), MoveToColumn(0));
-            println!("{}", t!("Complete").bright_green(),);
+            println!("{}", t!("Complete").bright_green());
         }
         _ => (),
     }
@@ -309,10 +332,10 @@ fn force_write(content: &[u8], to: &PathBuf) -> Result<(), std::io::Error> {
         .create(true)
         .truncate(true)
         .open(to)
+        && file.write_all(content).is_ok()
+        && file.flush().is_ok()
     {
-        if file.write_all(content).is_ok() && file.flush().is_ok() {
-            return Ok(());
-        }
+        return Ok(());
     }
 
     // If normal write fails, use atomic replacement strategy

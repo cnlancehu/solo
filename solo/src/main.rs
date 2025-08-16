@@ -7,10 +7,7 @@
     clippy::correctness
 )]
 
-use std::{
-    env::{self},
-    fs, process,
-};
+use std::{env, fs, process};
 
 use cli::{CliAction, HelpInfo, ManageConfigAction};
 use cnxt::Colorize as _;
