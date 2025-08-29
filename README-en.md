@@ -6,13 +6,13 @@
 
 A cloud server port hiding tool
 
-## ✨ Features
+## Features
 
-- 🖥️ **Design for Cloud Servers**: Supports mainstream cloud providers
-- 🔒 **Protect Important Port**: SSH, remote desktop, panels and other critical services
-- 🛡️ **Private Access**: Ports are only accessible to you, avoiding malicious scanning
+- **Design for Cloud Servers**: Supports mainstream cloud providers
+- **Protect Important Port**: SSH, remote desktop, panels and other critical services
+- **Private Access**: Ports are only accessible to you, avoiding malicious scanning
 
-## 🚀 Quick Start
+## Quick Start
 
 Protect your server in just three steps:
 
@@ -20,12 +20,12 @@ Protect your server in just three steps:
 2. **Configure Service** - Configure according to the [documentation](https://solo.lance.fun/)
 3. **Run Protection** - Start Solo (supports auto-start and scheduled running)
 
-## 📚 Usage Guide
+## Usage Guide
 
-- 📖 [Complete Documentation](https://solo.lance.fun/)
-- ⬇️ [Download Page](https://solo.lance.fun/download/)
+- [Complete Documentation](https://solo.lance.fun/)
+- [Download Page](https://solo.lance.fun/download/)
 
-## ☁️ Supported Cloud Providers
+## Supported Cloud Providers
 
 |   Provider    |                      Products                      |
 | :-----------: | :------------------------------------------------: |
@@ -33,10 +33,10 @@ Protect your server in just three steps:
 |    Aliyun     | Elastic Compute Service, Simple Application Server |
 |    Rainyun    |                 Cloud Server                       |
 
-## 🤝 Contributing
+## Contributing
 
 Solo is under continuous development and welcomes your participation:
 
-- 🐛 **Report Issues**: [Github Issues](https://github.com/cnlancehu/solo/issues/new) | [Gitee Issues](https://gitee.com/lancehu/solo/issues/new)
-- 🔧 **Code Contribution**: [Submit Pull Request](https://github.com/cnlancehu/solo)
-- 📝 **Documentation Improvement**: [Improve Documentation](https://github.com/cnlancehu/solo-doc)
+- **Report Issues**: [Github Issues](https://github.com/cnlancehu/solo/issues/new) | [Gitee Issues](https://gitee.com/lancehu/solo/issues/new)
+- **Code Contribution**: [Submit Pull Request](https://github.com/cnlancehu/solo)
+- **Documentation Improvement**: [Improve Documentation](https://github.com/cnlancehu/solo-doc)
