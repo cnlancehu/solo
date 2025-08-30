@@ -28,15 +28,18 @@ pub enum MachineType {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     pub name: String,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub servers: Vec<Server>,
     #[serde(default)]
     pub schedule: Schedule,
     #[serde(default)]
     pub ip_provider: IpProvider,
     #[serde(default)]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub notifications: Vec<Notification>,
 
-    pub no_proxy: Option<bool>,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub no_proxy: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -148,7 +151,7 @@ mod tests {
             schedule: Schedule::Loop(60),
             ip_provider: IpProvider::Embed(EmbedIpProvider::CurlMyIp),
             notifications: vec![],
-            no_proxy: None,
+            no_proxy: false,
         };
 
         let config = toml::to_string(&config).unwrap();

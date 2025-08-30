@@ -201,7 +201,7 @@ fn execute_task<'a>(
                 };
 
                 let mut builder = client::new_builder();
-                if config.no_proxy.unwrap_or(false) {
+                if config.no_proxy {
                     builder = builder.no_proxy();
                 }
                 let client = builder.build().unwrap();

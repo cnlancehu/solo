@@ -238,7 +238,7 @@ fn generate_example_config() -> String {
         schedule: Schedule::Once,
         ip_provider: IpProvider::Embed(EmbedIpProvider::IpEcho),
         notifications: vec![],
-        no_proxy: None,
+        no_proxy: false,
     };
     toml::to_string_pretty(&config).unwrap()
 }
