@@ -79,6 +79,7 @@ def ci_build():
                     response1 = response2 = None
                     break
                 print(f"Upload attempt {attempt + 1} failed, retrying...")
+                print(f"Error: {e}")
                 time.sleep(2 ** attempt)  # Exponential backoff
         if response1.ok and response2.ok:
             print("Successfully uploaded")
