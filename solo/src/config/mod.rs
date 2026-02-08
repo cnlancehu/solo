@@ -6,7 +6,6 @@ use reader::get_config_list;
 
 pub mod definition;
 pub mod reader;
-pub mod serde;
 
 lazy_static! {
     pub static ref CONFIG_DETECTION_PATH: PathBuf = {

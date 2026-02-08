@@ -1,7 +1,7 @@
 [package]
 name = "solo-lib"
 description = "Library for the Solo tool, an app for cloud safety."
-version = "0.2.3"
+version = "0.2.4"
 edition = "2024"
 license = "Apache-2.0"
 authors = ["Lance <me@lance.fun>"]
@@ -22,19 +22,8 @@ sha2 = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 
-# Use native TLS for Windows and macOS for better tls support
-[target.'cfg(any(target_os = "windows", target_os = "macos"))'.dependencies]
-reqwest = { version = "0.12.22", default-features = false, features = [
-    "native-tls",
+reqwest = { version = "0.13.2", default-features = false, features = [
+    "query",
     "json",
-
-    "stream",
-] }
-
-[target.'cfg(not(any(target_os = "windows", target_os = "macos")))'.dependencies]
-reqwest = { version = "0.12.22", default-features = false, features = [
-    "rustls-tls-native-roots",
-    "json",
-
     "stream",
 ] }

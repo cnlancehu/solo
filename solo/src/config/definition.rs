@@ -1,6 +1,5 @@
 use serde::{Deserialize, Serialize};
 
-use super::serde::deserialize_untagged_enum_case_insensitive;
 use crate::ipfetcher::{IpProvider, Protocol};
 
 pub const MACHINE_TYPES_WITH_OPTIONAL_SECRET_ID: &[MachineType] =
@@ -46,7 +45,6 @@ pub struct Config {
 pub struct Server {
     pub name: String,
 
-    #[serde(deserialize_with = "deserialize_untagged_enum_case_insensitive")]
     pub machine_type: MachineType,
     pub machine_id: String,
 
@@ -57,32 +55,26 @@ pub struct Server {
     pub secret_id: String,
     pub secret_key: String,
 
-    #[serde(deserialize_with = "deserialize_untagged_enum_case_insensitive")]
     pub protocol: Protocol,
     pub rules: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
+#[derive(Default)]
 pub enum Schedule {
+    #[default]
     Once,
     Loop(
         usize, // interval_seconds
     ),
 }
 
-impl Default for Schedule {
-    fn default() -> Self {
-        Self::Once
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Notification {
     pub name: String,
-    #[serde(deserialize_with = "deserialize_untagged_enum_case_insensitive")]
     pub trigger: NotificationTrigger,
-    #[serde(deserialize_with = "deserialize_untagged_enum_case_insensitive")]
     pub method: NotificationMethod,
 }
 
@@ -150,7 +142,18 @@ mod tests {
             servers: vec![],
             schedule: Schedule::Loop(60),
             ip_provider: IpProvider::Embed(EmbedIpProvider::CurlMyIp),
-            notifications: vec![],
+            notifications: vec![Notification {
+                name: "qmsg".to_string(),
+                trigger: NotificationTrigger::OnSuccessFullyChanged,
+                method: NotificationMethod::Qmsg {
+                    endpoint: Some("endpoint".to_string()),
+                    key: "key".to_string(),
+                    msg_type: QmsgConfigMsgType::Group,
+                    show_ipaddr: Some(true),
+                    qq: Some("qq".to_string()),
+                    bot: Some("bot".to_string()),
+                },
+            }],
             no_proxy: false,
         };
 

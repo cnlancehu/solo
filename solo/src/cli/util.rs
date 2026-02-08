@@ -32,7 +32,7 @@ pub fn print_error_info(
                 if error_arg_nums.contains(&(i + 1)) {
                     arg.bright_cyan().to_string()
                 } else {
-                    arg.to_string()
+                    arg.clone()
                 }
             })
             .collect::<Vec<String>>()
