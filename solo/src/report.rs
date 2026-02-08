@@ -115,7 +115,10 @@ pub fn show_full_report(
         chrono::DateTime::from_timestamp(report.finished_timestamp, 0)
             .map_or_else(
                 || report.finished_timestamp.to_string(),
-                |dt| dt.format("%Y-%m-%d %H:%M:%S").to_string()
+                |dt| dt
+                    .with_timezone(&chrono::Local)
+                    .format("%Y-%m-%d %H:%M:%S")
+                    .to_string()
             )
             .bright_green_if(color)
     ));
