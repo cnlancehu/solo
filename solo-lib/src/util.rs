@@ -1,6 +1,6 @@
 use std::time::{SystemTime, SystemTimeError};
 
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit as _, Mac};
 use sha2::{Digest, Sha256};
 
 pub(crate) fn current_timestamp() -> Result<u64, SystemTimeError> {
@@ -12,7 +12,7 @@ pub(crate) fn current_timestamp() -> Result<u64, SystemTimeError> {
 pub(crate) fn sha256_hex(message: &str) -> String {
     let mut hasher = Sha256::new();
     hasher.update(message);
-    format!("{:x}", hasher.finalize()).to_lowercase()
+    hex::encode(hasher.finalize())
 }
 
 pub(crate) fn hmac256(key: &[u8], message: &str) -> Result<Vec<u8>, String> {

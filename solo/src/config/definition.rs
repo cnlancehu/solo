@@ -70,7 +70,6 @@ pub enum Schedule {
     ),
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Notification {
     pub name: String,

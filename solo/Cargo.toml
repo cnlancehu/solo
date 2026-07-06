@@ -26,14 +26,14 @@ toml = { workspace = true }
 rand = { workspace = true }
 crossterm = { workspace = true }
 
-lettre = { version = "0.11.17", default-features = false, features = [
+lettre = { version = "0.11.22", default-features = false, features = [
     "rustls",
     "rustls-native-certs",
     "aws-lc-rs",
     "smtp-transport",
     "builder",
 ] }
-reqwest = { version = "0.13.2", features = [
+reqwest = { version = "0.13.4", features = [
     "query",
     "json",
     "stream",

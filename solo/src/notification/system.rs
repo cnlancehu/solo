@@ -8,7 +8,7 @@ use std::{
 };
 
 use futures::TryFutureExt as _;
-use rand::Rng;
+use rand::RngExt as _;
 use rust_i18n::t;
 use tauri_winrt_notification::{Duration, IconCrop, Progress, Sound, Toast};
 use tokio::{fs, time::sleep};

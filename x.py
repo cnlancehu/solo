@@ -63,30 +63,30 @@ def ci_build():
             else:
                 app_name_with_extension = app_name
             zipf.write(os.path.join("target", target, "release", app_name_with_extension), arcname=app_name_with_extension, compresslevel=3)
-        headers = {
-            'token': token,
-            'user-agent': 'Lance Dev',
-        }
-        max_retries = 10
-        for attempt in range(max_retries):
-            try:
-                response1 = requests.request("POST", f"https://pkg.lance.fun/upload?{app_name}+{version}+{alias}+zip+{app_name}.zip", headers=headers, data=open(os.path.join("dist", f"{app_name}-{alias}.zip"), 'rb'))
-                response2 = requests.request("POST", f"https://pkg.lance.fun/upload?{app_name}+{version}+{alias}+files+{app_name_with_extension}", headers=headers, data=open(os.path.join("target", target, "release", app_name_with_extension), 'rb'))
-                break
-            except requests.exceptions.RequestException as e:
-                if attempt == max_retries - 1:
-                    print(f"Upload failed after {max_retries} attempts: {e}")
-                    response1 = response2 = None
-                    break
-                print(f"Upload attempt {attempt + 1} failed, retrying...")
-                print(f"Error: {e}")
-                time.sleep(2 ** attempt)  # Exponential backoff
-        if response1.ok and response2.ok:
-            print("Successfully uploaded")
-        else:
-            print("Failed to upload")
-            print(response1.text)
-            print(response2.text)
+        # headers = {
+        #     'token': token,
+        #     'user-agent': 'Lance Dev',
+        # }
+        # max_retries = 10
+        # for attempt in range(max_retries):
+        #     try:
+        #         response1 = requests.request("POST", f"https://pkg.lance.fun/upload?{app_name}+{version}+{alias}+zip+{app_name}.zip", headers=headers, data=open(os.path.join("dist", f"{app_name}-{alias}.zip"), 'rb'))
+        #         response2 = requests.request("POST", f"https://pkg.lance.fun/upload?{app_name}+{version}+{alias}+files+{app_name_with_extension}", headers=headers, data=open(os.path.join("target", target, "release", app_name_with_extension), 'rb'))
+        #         break
+        #     except requests.exceptions.RequestException as e:
+        #         if attempt == max_retries - 1:
+        #             print(f"Upload failed after {max_retries} attempts: {e}")
+        #             response1 = response2 = None
+        #             break
+        #         print(f"Upload attempt {attempt + 1} failed, retrying...")
+        #         print(f"Error: {e}")
+        #         time.sleep(2 ** attempt)  # Exponential backoff
+        # if response1.ok and response2.ok:
+        #     print("Successfully uploaded")
+        # else:
+        #     print("Failed to upload")
+        #     print(response1.text)
+        #     print(response2.text)
 
 if __name__ == "__main__":
     import sys

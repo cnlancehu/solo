@@ -2,7 +2,7 @@ use std::{result::Result::Ok, time::SystemTime};
 
 use anyhow::{Error, Result};
 use chrono::Utc;
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit as _, Mac};
 use http::HeaderMap;
 use reqwest::{Client, Request};
 use serde::{Deserialize, Serialize};
@@ -125,7 +125,7 @@ pub(super) fn request_builder(
     let hashed_canonical_request = {
         let mut hasher = Sha256::new();
         hasher.update(canonical_request.as_bytes());
-        format!("{:x}", hasher.finalize())
+        hex::encode(hasher.finalize())
     };
     let string_to_sign = format!(
         "{algorithm}\n{timestamp}\n{credential_scope}\n{hashed_canonical_request}"

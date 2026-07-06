@@ -5,7 +5,7 @@ use anyhow::Result;
 use chrono::DateTime;
 use http::Method;
 use percent_encoding::{NON_ALPHANUMERIC, utf8_percent_encode};
-use rand::Rng;
+use rand::RngExt as _;
 use reqwest::{
     Client, Request,
     header::{HeaderMap, HeaderValue},

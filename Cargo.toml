@@ -6,7 +6,7 @@ resolver = "2"
 tokio = { version = "1.49.0", features = ["full"] }
 serde = { version = "1.0.219", features = ["derive"] }
 sys-locale = "0.3.2"
-rust-i18n = "3.1.5"
+rust-i18n = "4.1.0"
 unicode-width = "0.2.2"
 anyhow = "1.0.101"
 lazy_static = "1.5.0"
@@ -15,19 +15,19 @@ chrono = "0.4.43"
 futures = "0.3.31"
 futures-util = "0.3.31"
 cnxt = { version = "0.1.6", features = ["conditional-coloring"] }
-toml = "0.9.8"
-rand = "0.9.2"
+toml = "1.1.2"
+rand = "0.10.2"
 crossterm = "0.29.0"
 hex = "0.4.3"
-hmac = "0.12.1"
+hmac = "0.13.0"
 http = "1.4.0"
 percent-encoding = "2.3.2"
-sha2 = "0.10.9"
+sha2 = "0.11.0"
 thiserror = "2.0.18"
 
 # Windows Only
-tauri-winrt-notification = "0.7.2"
-opener = "0.8.4"
+tauri-winrt-notification = "0.7.3"
+opener = "0.8.5"
 
 [profile.release]
 panic = "abort"
